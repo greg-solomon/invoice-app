@@ -1,0 +1,75 @@
+@import url(https://fonts.googleapis.com/css?family=Spartan:100,200,300,regular,500,600,700,800,900);
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-family: "Spartan", -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
+    Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+main {
+  position: relative;
+  padding-left: 6.4375rem;
+  min-height: 90vh;
+}
+
+button {
+  cursor: pointer;
+}
+
+// TYPOGRAPHY
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: bold;
+}
+
+h1 {
+  font-size: 2rem;
+  line-height: 2.25rem;
+  letter-spacing: -1;
+}
+
+h2 {
+  font-size: 1.25rem;
+  line-height: 1.375rem;
+  letter-spacing: -0.63;
+}
+
+h3 {
+  font-size: 1rem;
+  line-height: 1.5rem;
+  letter-spacing: -0.8;
+}
+
+h4 {
+  font-size: 0.75rem;
+  line-height: 0.9375rem;
+  letter-spacing: -0.25;
+}
+
+p.body_1 {
+  font-size: 0.75rem;
+  line-height: 0.9375rem;
+  letter-spacing: -0.25;
+  font-weight: 500;
+}
+
+p.body_2 {
+  font-size: 0.6875rem;
+  line-height: 1.125rem;
+  letter-spacing: -0.23;
+  font-weight: 500;
+}

@@ -1,0 +1,123 @@
+@import "../../styles/variables";
+
+// <header> element
+.headerRoot {
+  background-color: $ebony;
+  overflow: hidden;
+  height: 4.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+// left/top side logo
+.headerLogoRoot {
+  background-color: $purple;
+  width: 4.5rem;
+  height: 4.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0px 20px 20px 0px;
+  position: relative;
+  overflow: hidden;
+
+  svg {
+    z-index: 2;
+  }
+
+  &:after {
+    content: "";
+    width: 100%;
+    height: 6.4375rem;
+    position: absolute;
+    background-color: $heliotrope;
+    border-radius: 20px 0px 0px 20px;
+    top: 50%;
+  }
+}
+
+// theme button and avatar wrapper
+.headerControls {
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+// button
+.themeToggleBtn {
+  background: none;
+  border: none;
+  padding: 0.25rem;
+
+  &:hover {
+    svg path {
+      fill: $selago;
+      transition: fill 0.1s ease-in-out;
+    }
+  }
+}
+
+.themeBtnWrapper {
+  border-right: 1px solid $darkAccent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.themeBtnWrapper,
+.avatarWrapper {
+  min-width: 5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.avatarWrapper img {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+}
+
+@media (min-width: $tablet) {
+  .themeBtnWrapper,
+  .avatarWrapper {
+    width: 6rem;
+  }
+}
+
+@media (min-width: $desktop) {
+  .headerRoot {
+    height: 100vh;
+    position: fixed;
+    left: 0;
+    width: 6.4375rem;
+    border-radius: 0px 20px 20px 0px;
+    flex-direction: column;
+    z-index: 3;
+  }
+
+  .headerLogoRoot {
+    width: 100%;
+    height: 6.4375rem;
+  }
+
+  .headerControls {
+    flex-direction: column;
+    width: 100%;
+    height: auto;
+  }
+
+  .themeBtnWrapper {
+    border-right: none;
+    border-bottom: 1px solid $darkAccent;
+  }
+
+  .themeBtnWrapper,
+  .avatarWrapper {
+    width: 100%;
+    height: 5.5rem;
+  }
+}
