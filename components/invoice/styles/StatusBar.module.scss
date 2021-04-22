@@ -1,0 +1,30 @@
+@import "../../../styles/mixins";
+@import "../../../styles/variables";
+
+.root {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: white;
+  margin: 0 auto;
+  padding: 2rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 10px 10px -10px rgba(72, 84, 159, 0.1004);
+  @include container;
+}
+
+.statusText {
+  @include normalText;
+  color: $baliHai;
+}
+
+.statusInfo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+
+  @media (min-width: $tablet) {
+    justify-content: flex-start;
+  }
+}

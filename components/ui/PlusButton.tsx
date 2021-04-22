@@ -1,14 +1,18 @@
 import React from "react";
-import { ScreenType } from "../../pages";
-import styles from "./PlusButton.module.scss";
+import { ScreenType } from "../../types";
+import styles from "./styles/PlusButton.module.scss";
 
-interface PlusButtonProps {
+interface PlusButtonProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   screenType: ScreenType;
 }
 
-export const PlusButton: React.FC<PlusButtonProps> = ({ screenType }) => {
+export const PlusButton: React.FC<PlusButtonProps> = ({
+  screenType,
+  ...props
+}) => {
   return (
-    <button className={styles.root}>
+    <button className={styles.root} {...props}>
       <span>
         <svg width="11" height="11" xmlns="http://www.w3.org/2000/svg">
           <path

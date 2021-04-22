@@ -1,0 +1,31 @@
+@import "../../styles/variables";
+@import "../../styles/mixins";
+
+.container {
+  @include container;
+  padding-top: 2.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  p {
+    color: $baliHai;
+  }
+
+  h1 {
+    margin-bottom: 1rem;
+  }
+
+  h2 {
+    margin-bottom: 0.5rem;
+  }
+}
+
+.actionControls {
+  display: flex;
+  align-items: center;
+}
+
+.invoiceOverview {
+  @include normalText();
+}

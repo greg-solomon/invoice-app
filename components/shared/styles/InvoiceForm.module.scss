@@ -1,0 +1,89 @@
+@import "../../../styles/mixins.scss";
+@import "../../../styles/variables.scss";
+
+.root {
+  position: fixed;
+  left: 0;
+  top: 4.5rem;
+  min-height: 100vh;
+  background-color: white;
+  width: 100%;
+  transition: transform 0.3s ease;
+  z-index: 2;
+  overflow-y: scroll;
+  padding-bottom: 4rem;
+  @media (min-width: $tablet) {
+    max-width: 619px;
+    border-radius: 0px 1.25rem 1.25rem 0;
+  }
+
+  @media (min-width: $desktop) {
+    max-width: calc(719px + 6.4375rem);
+    top: 0;
+    left: 0;
+    padding-left: 6.4375rem;
+  }
+
+  h1 {
+    font-size: 1.5rem;
+  }
+}
+
+.darkOut {
+  background: rgba(0, 0, 0, 0.4984);
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  z-index: 1;
+}
+
+.backBtnWrapper {
+  padding: 1.5rem;
+}
+
+.backBtn {
+  background: none;
+  border: none;
+  @include normalText();
+
+  span {
+    font-weight: bold;
+  }
+
+  img {
+    margin-right: 1rem;
+  }
+}
+
+.content {
+  padding: 1.5rem;
+
+  h1 {
+    color: $vulcan;
+    margin-bottom: 1.5rem;
+    span {
+      color: $shipCove;
+    }
+  }
+}
+
+// purple 'Bill From' label at top of form
+.colorLabel {
+  @include normalText;
+  color: $purple;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+}
+
+// flex container for inline input components
+.flex {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  div {
+    width: 48%;
+  }
+}

@@ -1,6 +1,6 @@
 import React from "react";
 import { useThemeContext } from "../../lib/context/ThemeContext";
-import styles from "./Header.module.scss";
+import styles from "./styles/Header.module.scss";
 interface HeaderProps {}
 
 export const Header: React.FC<HeaderProps> = ({}) => {

@@ -1,0 +1,111 @@
+@import "../../styles/variables";
+@import "../../styles/mixins";
+
+.root {
+  width: 100%;
+  background: white;
+  margin-bottom: 1rem;
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  box-shadow: 0px 10px 10px -10px rgba(72, 84, 159, 0.1004);
+  cursor: pointer;
+  transition: 0.3s ease;
+  border: 1px solid rgba(0, 0, 0, 0);
+
+  &:hover {
+    box-shadow: none;
+    border: 1px solid $purple;
+  }
+
+  @media (min-width: $tablet) {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+.itemOverview {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.625rem;
+
+  @media (min-width: $tablet) {
+    margin-bottom: 0;
+    margin-right: 2rem;
+  }
+}
+
+.itemInfo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  @media (min-width: $tablet) {
+    // margin-right: 1.75rem;
+    justify-content: space-between;
+    width: 60%;
+  }
+}
+
+.itemId {
+  @include normalText();
+  font-weight: bold;
+  span {
+    color: $shipCove;
+  }
+
+  @media (min-width: $tablet) {
+    margin-right: 1.75rem;
+  }
+}
+
+.clientName {
+  @include normalText();
+  color: $baliHai;
+
+  @media (min-width: $tablet) {
+  }
+}
+
+.dateAndAmount {
+  color: $shipCove;
+
+  @media (min-width: $tablet) {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+  }
+}
+
+.amount {
+  font-size: 1rem;
+  line-height: 2rem;
+  color: $mirage;
+  font-weight: bold;
+  letter-spacing: -0.8px;
+}
+
+.date {
+  margin-bottom: 0.25rem;
+  @include smallText();
+  color: $shipCove;
+  @media (min-width: $tablet) {
+    margin-bottom: 0;
+  }
+}
+
+.indicatorWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+
+  img {
+    margin-left: 1rem;
+    display: none;
+
+    @media (min-width: $tablet) {
+      display: inline-block;
+    }
+  }
+}

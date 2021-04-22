@@ -1,0 +1,25 @@
+@import "./variables";
+@import "./mixins";
+
+.backBtnWrapper {
+  padding: 1.5rem 0rem;
+  @include container();
+}
+
+.backBtn {
+  background: none;
+  border: none;
+
+  span {
+    font-weight: bold;
+  }
+  @include normalText();
+
+  img {
+    margin-right: 1rem;
+  }
+}
+
+.root {
+  padding: 1.5rem;
+}

@@ -1,0 +1,16 @@
+@mixin normalText {
+  font-size: 0.75rem;
+  line-height: 0.9375rem;
+  letter-spacing: -0.25px;
+}
+
+@mixin smallText {
+  font-size: 0.6875rem;
+  line-height: 1.125rem;
+  letter-spacing: -0.23px;
+}
+
+@mixin container {
+  width: clamp(87.5%, 87.5%, 730px);
+  margin: 0 auto;
+}

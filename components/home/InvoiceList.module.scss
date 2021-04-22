@@ -1,0 +1,30 @@
+@import "../../styles/variables";
+@import "../../styles/mixins";
+
+.list {
+  @include container;
+  margin-top: 1.5rem;
+}
+
+.emptyRoot {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  max-width: 16rem;
+  padding: 0.9375rem;
+  img {
+    margin-bottom: 3rem;
+  }
+  h2 {
+    margin-bottom: 1.5rem;
+    text-align: center;
+    color: $vulcan;
+  }
+}
+
+.emptyText {
+  @include normalText();
+  text-align: center;
+  color: $baliHai;
+}

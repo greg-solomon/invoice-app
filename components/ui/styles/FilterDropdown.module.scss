@@ -1,0 +1,29 @@
+.root {
+  font-weight: bold;
+  font-size: 0.75rem;
+  margin-right: 0.75rem;
+  position: relative;
+  cursor: pointer;
+  svg {
+    margin-left: 0.75rem;
+  }
+}
+
+.dropdown {
+  position: absolute;
+  background-color: white;
+  border-radius: 0.5rem;
+  width: 12rem;
+  height: 8rem;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-flow: column;
+  padding: 1.5rem;
+  margin-top: 1.5rem;
+  box-shadow: 0 10px 20px rgba(72, 84, 159, 0.25);
+  div {
+    margin-bottom: 0.75rem;
+  }
+}

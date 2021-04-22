@@ -1,0 +1,91 @@
+@import "../../../styles/mixins";
+@import "../../../styles/variables";
+
+.root {
+  position: relative;
+  margin-bottom: 1.5rem;
+  label {
+    display: block;
+    @include normalText;
+    color: $shipCove;
+    margin-bottom: 0.75rem;
+  }
+
+  input[type="date"] {
+    opacity: 0;
+    pointer-events: none;
+    position: absolute;
+  }
+
+  .input[type="text"] {
+    height: 3rem;
+    width: 100%;
+    border-radius: 0.25rem;
+    border: 1px solid $selago;
+    padding: 0 1rem;
+    font-weight: bold;
+    @include normalText;
+    &:focus {
+      border: 1px solid $purple;
+      outline: none;
+    }
+  }
+}
+
+.calendarIcon {
+  position: absolute;
+  right: 5%;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.inputWrapper {
+  position: relative;
+}
+
+.picker {
+  position: absolute;
+  top: 105%;
+  left: 0;
+  max-width: 240px;
+  width: 100%;
+  background: white;
+  min-height: 243px;
+  text-align: center;
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 10px 20px rgba(72, 84, 159, 0.25);
+}
+
+.pickerNav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+
+  p {
+    @include normalText;
+    font-weight: bold;
+  }
+  button {
+    padding: 0.5rem;
+    border: none;
+    background: none;
+  }
+}
+
+.days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  row-gap: 1rem;
+  font-weight: bold;
+
+  p {
+    @include normalText;
+  }
+}
+
+.selectedDay {
+  color: $purple;
+}

@@ -16,9 +16,10 @@ a {
 
 main {
   position: relative;
-
+  background-color: $whisper;
   min-height: 100vh;
-
+  padding-bottom: 6rem;
+  padding-top: 5rem;
   @media (min-width: $desktop) {
     padding-left: 6.4375rem;
   }
@@ -61,18 +62,4 @@ h4 {
   font-size: 0.75rem;
   line-height: 0.9375rem;
   letter-spacing: -0.25px;
-}
-
-p.body_1 {
-  font-size: 0.75rem;
-  line-height: 0.9375rem;
-  letter-spacing: -0.25px;
-  font-weight: 500;
-}
-
-p.body_2 {
-  font-size: 0.6875rem;
-  line-height: 1.125rem;
-  letter-spacing: -0.23px;
-  font-weight: 500;
 }
