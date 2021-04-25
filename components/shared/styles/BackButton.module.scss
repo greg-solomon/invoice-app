@@ -1,0 +1,35 @@
+@import "../../../styles/variables";
+@import "../../../styles/mixins";
+
+.backBtnWrapper {
+  padding: 2rem 0;
+  @include container;
+}
+
+.backBtn {
+  background: none;
+  border: none;
+  @include normalText();
+
+  span {
+    font-weight: bold;
+  }
+
+  img {
+    margin-right: 1rem;
+  }
+
+  &:hover,
+  &:focus {
+    color: $baliHai;
+  }
+}
+
+.backBtnDark {
+  color: white;
+
+  &:hover,
+  &:focus {
+    color: $baliHai;
+  }
+}

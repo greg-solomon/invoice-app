@@ -1,6 +1,10 @@
 @import "../../../styles/mixins.scss";
 @import "../../../styles/variables.scss";
 
+$draftBg: rgba(55, 59, 83, 0.0571);
+$paid: #33d69f;
+$paidBg: rgba(51, 214, 159, 0.0571);
+
 .pending,
 .draft,
 .paid {
@@ -35,15 +39,20 @@
   }
 }
 
-$draftBg: rgba(55, 59, 83, 0.0571);
-$paid: #33d69f;
-$paidBg: rgba(51, 214, 159, 0.0571);
-
 .draft {
   background: $draftBg;
   color: #373b53;
   span {
-    background-color: #373b53;
+    background: #373b53;
+  }
+}
+
+.draftDark {
+  background: rgba(223, 227, 250, 0.0571);
+  color: white;
+
+  span {
+    background: white;
   }
 }
 

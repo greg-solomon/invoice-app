@@ -46,3 +46,10 @@
     border: 1px solid $purple;
   }
 }
+
+.dark {
+  label::before {
+    background-color: $mirage;
+    border: 1px solid $mirage;
+  }
+}

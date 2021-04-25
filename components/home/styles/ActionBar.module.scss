@@ -1,0 +1,53 @@
+@import "../../../styles/variables";
+@import "../../../styles/mixins";
+
+.container {
+  @include container;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2.25rem;
+  p {
+    color: $baliHai;
+  }
+
+  h1 {
+    margin-bottom: 1rem;
+  }
+
+  h2 {
+    margin-bottom: 0.5rem;
+  }
+
+  @media (min-width: $tablet) {
+    margin-bottom: 3.5rem;
+    margin-top: 3.5rem;
+  }
+  @media (min-width: $desktop) {
+    margin-top: 0;
+    padding-top: 4.5rem;
+  }
+}
+
+.actionControls {
+  display: flex;
+  align-items: center;
+}
+
+.invoiceOverview {
+  @include normalText();
+}
+
+.containerDark {
+  p {
+    color: white;
+  }
+
+  h1 {
+    color: white;
+  }
+
+  h2 {
+    color: white;
+  }
+}

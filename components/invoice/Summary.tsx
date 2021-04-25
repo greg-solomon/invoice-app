@@ -4,21 +4,35 @@ import { format } from "date-fns";
 import styles from "./styles/Summary.module.scss";
 import { Heading } from "../ui/Heading";
 import { Receipt } from "./Receipt";
+import { useThemeContext } from "../../lib/context/ThemeContext";
 
 interface SummaryProps {
   invoice: Invoice;
 }
 
 export const Summary: React.FC<SummaryProps> = ({ invoice }) => {
+  const { dark } = useThemeContext();
+
+  const billingLabelStyle = [
+    styles.billingLabel,
+    dark ? styles.whiteText : "",
+  ].join(" ");
+
   return (
-    <div className={styles.root}>
+    <div className={[styles.root, dark ? styles.darkRoot : ""].join(" ")}>
       <div className={styles.summaryTop}>
         <div>
-          <p className={styles.id}>
+          <p className={[styles.id, dark ? styles.whiteText : ""].join(" ")}>
             <span>#</span>
             {invoice.id}
           </p>
-          <p className={styles.description}>{invoice.description}</p>
+          <p
+            className={[styles.description, dark ? styles.whiteText : ""].join(
+              " "
+            )}
+          >
+            {invoice.description}
+          </p>
         </div>
         <div className={styles.address}>
           <p>{invoice.senderAddress.street}</p>
@@ -29,18 +43,18 @@ export const Summary: React.FC<SummaryProps> = ({ invoice }) => {
       </div>
       <div className={styles.billingInformation}>
         <div className={styles.dateInfo}>
-          <p className={styles.billingLabel}>Invoice Date</p>
+          <p className={billingLabelStyle}>Invoice Date</p>
           <Heading variant="h3">
             {format(new Date(invoice.createdAt), "dd MMM yyyy")}
           </Heading>
 
-          <p className={styles.billingLabel}>Payment Due</p>
+          <p className={billingLabelStyle}>Payment Due</p>
           <Heading variant="h3">
             {format(new Date(invoice.paymentDue), "dd MMM yyyy")}
           </Heading>
         </div>
         <div className={styles.clientInfo}>
-          <p className={styles.billingLabel}>Bill To</p>
+          <p className={billingLabelStyle}>Bill To</p>
           <Heading variant="h3">{invoice.clientName}</Heading>
           <div className={styles.address}>
             <p>{invoice.clientAddress.street}</p>
@@ -50,7 +64,7 @@ export const Summary: React.FC<SummaryProps> = ({ invoice }) => {
           </div>
         </div>
         <div className={styles.emailInfo}>
-          <p className={styles.billingLabel}>Sent To</p>
+          <p className={billingLabelStyle}>Sent To</p>
           <Heading variant="h3">{invoice.clientEmail}</Heading>
         </div>
       </div>

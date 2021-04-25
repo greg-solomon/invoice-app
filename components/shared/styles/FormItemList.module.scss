@@ -1,0 +1,105 @@
+@import "../../../styles/variables";
+@import "../../../styles/mixins";
+
+.itemList {
+  margin-top: 4.5rem;
+
+  h2 {
+    font-size: 1.125rem;
+    line-height: 2rem;
+    letter-spacing: -0.38px;
+    color: #777f98;
+    margin-bottom: 1.5rem;
+  }
+
+  @media (min-width: $tablet) {
+    margin-top: 1.5rem;
+  }
+}
+
+.addNewBtn {
+  margin-bottom: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  svg {
+    margin-right: 0.25rem;
+  }
+  svg path {
+    fill: $shipCove;
+  }
+}
+
+.priceInfo {
+  display: grid;
+  place-items: center;
+  justify-items: center;
+  grid-template-columns: 25% 25% 0.9fr 0.9fr;
+  column-gap: 1rem;
+  margin-bottom: 3rem;
+  input {
+    padding-right: 0rem;
+  }
+
+  input:disabled {
+    border: none;
+    background: none;
+    color: $shipCove;
+    text-align: right;
+    padding: 0;
+  }
+  button {
+    border: none;
+    background: none;
+  }
+
+  @media (min-width: $tablet) {
+    margin-bottom: 1rem;
+
+    div {
+      margin-bottom: 1rem;
+    }
+  }
+}
+
+.darkPriceInfo {
+  input:disabled {
+    color: white;
+  }
+}
+
+.item {
+  display: block;
+
+  @media (min-width: $tablet) {
+    display: flex;
+  }
+}
+
+.nameInput {
+  @media (min-width: $tablet) {
+    min-width: 214px;
+    margin-right: 1rem;
+    margin-bottom: 1rem;
+  }
+}
+
+.darkNewBtn {
+  color: white;
+  background: $mirage;
+  svg path {
+    fill: white;
+  }
+}
+
+.deleteBtn {
+  svg {
+    fill: $shipCove;
+  }
+  &:hover {
+    svg {
+      transition: 0.3s ease;
+      fill: $burntSienna;
+    }
+  }
+}

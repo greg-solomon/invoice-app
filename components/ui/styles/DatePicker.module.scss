@@ -11,23 +11,40 @@
     margin-bottom: 0.75rem;
   }
 
-  input[type="date"] {
-    opacity: 0;
-    pointer-events: none;
-    position: absolute;
-  }
-
-  .input[type="text"] {
+  input[type="text"] {
     height: 3rem;
     width: 100%;
     border-radius: 0.25rem;
     border: 1px solid $selago;
     padding: 0 1rem;
     font-weight: bold;
+    cursor: pointer;
     @include normalText;
+
     &:focus {
       border: 1px solid $purple;
       outline: none;
+    }
+
+    &:disabled {
+      background-color: inherit;
+      color: $baliHai;
+      cursor: not-allowed;
+      & + .calendarIcon path {
+        opacity: 0.5;
+      }
+    }
+  }
+}
+
+.darkRoot {
+  input[type="text"] {
+    background-color: $mirage;
+    color: white;
+    border: 1px solid $ebony;
+
+    &:disabled {
+      background-color: $mirage;
     }
   }
 }
@@ -38,6 +55,10 @@
   top: 50%;
   transform: translateY(-50%);
   pointer-events: none;
+
+  path {
+    fill: $shipCove;
+  }
 }
 
 .inputWrapper {
@@ -55,7 +76,12 @@
   text-align: center;
   padding: 1.5rem;
   border-radius: 0.5rem;
+  z-index: 4;
   box-shadow: 0 10px 20px rgba(72, 84, 159, 0.25);
+}
+
+.darkPicker {
+  background-color: $mirage;
 }
 
 .pickerNav {
@@ -83,6 +109,10 @@
 
   p {
     @include normalText;
+    cursor: pointer;
+    &:hover {
+      color: $purple;
+    }
   }
 }
 

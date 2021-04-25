@@ -1,25 +1,32 @@
-import React from "react";
+import React, { SetStateAction } from "react";
 import { useToggle } from "../../lib/hooks/useToggle";
-import { getDaysInMonth, format, getMonth, getYear } from "date-fns";
+import { getDaysInMonth, format, getYear } from "date-fns";
 
 import styles from "./styles/DatePicker.module.scss";
+import { useThemeContext } from "../../lib/context/ThemeContext";
 
 interface DatePickerProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label: string;
   value: string | number;
+  setInvoiceDate: React.Dispatch<SetStateAction<string>>;
 }
 
-export const DatePicker: React.FC<DatePickerProps> = (props) => {
+export const DatePicker: React.FC<DatePickerProps> = ({
+  setInvoiceDate,
+  value,
+  ...props
+}) => {
   const ref = React.useRef<HTMLDivElement>(null);
+  const inputRef = React.useRef<HTMLInputElement>(null);
+  const { dark } = useThemeContext();
 
   // initial values
-  const initialSelectedDate = new Date(props.value || Date.now());
+  const initialSelectedDate = value ? new Date(value) : new Date(Date.now());
   const initialCurrentMonth = new Date(initialSelectedDate).getMonth();
-  const initialCurrentYear = getYear(new Date(props.value));
-  const initialDaysInMonth = getDaysInMonth(
-    new Date(initialCurrentYear, initialCurrentMonth)
-  );
+  const initialCurrentYear = getYear(initialSelectedDate);
+  const initialDaysInMonth = getDaysInMonth(initialSelectedDate);
 
+  // hooks
   const [open, openHandlers] = useToggle();
   const [selectedDate, setSelectedDate] = React.useState(initialSelectedDate);
   const [currentMonth, setCurrentMonth] = React.useState(initialCurrentMonth);
@@ -30,14 +37,14 @@ export const DatePicker: React.FC<DatePickerProps> = (props) => {
     setDaysInMonth(getDaysInMonth(new Date(currentYear, currentMonth)));
   };
 
+  const handleClickOff = (e: MouseEvent) => {
+    if (!ref.current?.contains(e.target as Node)) {
+      openHandlers.off();
+    }
+  };
+
   // close datepicker on click outside of the datepicker
   const clickOffEffect = () => {
-    const handleClickOff = (e: MouseEvent) => {
-      if (!ref.current?.contains(e.target as Node)) {
-        openHandlers.off();
-      }
-    };
-
     if (open) {
       window.addEventListener("click", handleClickOff);
     } else {
@@ -48,9 +55,19 @@ export const DatePicker: React.FC<DatePickerProps> = (props) => {
     };
   };
 
+  const setFocus = () => {
+    if (open) {
+      inputRef.current?.focus();
+    } else {
+      inputRef.current?.blur();
+    }
+  };
+
   React.useEffect(resetDaysInMonthEffect, [currentMonth]);
   React.useEffect(clickOffEffect, [open]);
+  React.useEffect(setFocus, [open]);
 
+  // handlers
   const handlePrevMonth = () => {
     setCurrentMonth((curr) => {
       if (curr - 1 < 0) {
@@ -78,27 +95,41 @@ export const DatePicker: React.FC<DatePickerProps> = (props) => {
     openHandlers.off();
   };
 
+  // props and styles
+  const rootProps = {
+    className: [styles.root, dark ? styles.darkRoot : ""].join(" "),
+    ref: ref,
+  };
+  const pickerClass = [styles.picker, dark ? styles.darkPicker : ""].join(" ");
+  const inputProps = {
+    type: "text",
+    ...props,
+    className: styles.input,
+    readOnly: true,
+    onFocus: openHandlers.on,
+    ref: inputRef,
+    value: format(selectedDate, "dd MMM yyyy"),
+  };
+
   return (
-    <div className={styles.root} ref={ref}>
+    <div {...rootProps}>
       <label htmlFor={props.name}>{props.label}</label>
       <div className={styles.inputWrapper}>
-        <input
-          type="text"
-          {...props}
-          className={styles.input}
-          readOnly={true}
-          onFocus={openHandlers.on}
-          value={format(new Date(selectedDate), "dd MMM yyyy")}
-        />
-        <img
-          src="/assets/icon-calendar.svg"
-          alt="Calendar Icon"
+        <input {...inputProps} />
+        <svg
+          width="16"
+          height="16"
+          xmlns="http://www.w3.org/2000/svg"
           className={styles.calendarIcon}
-        />
+        >
+          <path
+            d="M14 2h-.667V.667A.667.667 0 0012.667 0H12a.667.667 0 00-.667.667V2H4.667V.667A.667.667 0 004 0h-.667a.667.667 0 00-.666.667V2H2C.897 2 0 2.897 0 4v10c0 1.103.897 2 2 2h12c1.103 0 2-.897 2-2V4c0-1.103-.897-2-2-2zm.667 12c0 .367-.3.667-.667.667H2A.668.668 0 011.333 14V6.693h13.334V14z"
+            fillRule="nonzero"
+          />
+        </svg>
       </div>
-      <input type="date" />
       {open && (
-        <div className={styles.picker}>
+        <div className={pickerClass}>
           <div className={styles.pickerNav}>
             <button onClick={handlePrevMonth}>
               <img src="/assets/icon-arrow-left.svg" alt="Prev Month Icon" />

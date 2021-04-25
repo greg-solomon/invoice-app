@@ -1,9 +1,7 @@
 import React from "react";
+import { useThemeContext } from "../../lib/context/ThemeContext";
 import { ItemStatus, ScreenType } from "../../types";
-import { DraftIndicator } from "../shared/DraftingIndicator";
-import { PaidIndicator } from "../shared/PaidIndicator";
-import { PendingIndicator } from "../shared/PendingIndicator";
-import { Button } from "../ui/Button";
+import { Indicator } from "../shared/Indicator";
 import { Controls } from "./Controls";
 import styles from "./styles/StatusBar.module.scss";
 
@@ -20,13 +18,12 @@ export const StatusBar: React.FC<StatusBarProps> = ({
   screenType,
   onClickEditing,
 }) => {
+  const { dark } = useThemeContext();
   return (
-    <div className={styles.root}>
+    <div className={[styles.root, dark ? styles.darkRoot : ""].join(" ")}>
       <div className={styles.statusInfo}>
         <p className={styles.statusText}>Status</p>
-        {status === "draft" && <DraftIndicator />}
-        {status === "pending" && <PendingIndicator />}
-        {status === "paid" && <PaidIndicator />}
+        <Indicator type={status} />
       </div>
       {screenType !== "phone" && <Controls onClickEditing={onClickEditing} />}
     </div>

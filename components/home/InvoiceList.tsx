@@ -1,9 +1,9 @@
 import React from "react";
-import { Invoice, ItemStatus, ScreenType } from "../../types";
-import styles from "./InvoiceList.module.scss";
+import { ItemStatus, ScreenType } from "../../types";
 import { InvoiceItem } from "./InvoiceItem";
 import { Heading } from "../ui/Heading";
 import { useInvoices } from "../../lib/context/InvoiceContext";
+import styles from "./styles/InvoiceList.module.scss";
 
 interface InvoiceListProps {
   filters: ItemStatus[];

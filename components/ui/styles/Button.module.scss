@@ -35,6 +35,16 @@
   }
 }
 
+.darkLightBtn {
+  background: $ebony;
+  color: white;
+
+  &:hover {
+    background-color: white;
+    color: $selago;
+  }
+}
+
 .orangeBtn {
   background: $burntSienna;
   color: white;
@@ -51,4 +61,22 @@
   &:hover {
     background: $vulcan;
   }
+}
+
+.darkDarkBtn {
+  color: white;
+
+  &:hover {
+    background-color: $mirage;
+  }
+}
+
+.longBtn {
+  background: #f9fafe;
+  color: $shipCove;
+  width: 100%;
+}
+
+.darkLongBtn {
+  background: $mirage;
 }

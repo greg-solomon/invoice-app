@@ -1,2 +1,89 @@
 @import "../../../styles/mixins";
 @import "../../../styles/variables";
+
+.root {
+  position: relative;
+
+  label {
+    @include normalText;
+    display: block;
+    color: $shipCove;
+    margin-bottom: 0.75rem;
+  }
+
+  input {
+    @include normalText;
+    width: 100%;
+    height: 3rem;
+    padding: 0 1.5rem;
+    font-weight: bold;
+    border-radius: 0.25rem;
+    border: 1px solid $selago;
+    cursor: pointer;
+    &:hover {
+      border: 1px solid $purple;
+    }
+
+    &:focus {
+      outline: none;
+      border: 1px solid $purple;
+    }
+  }
+
+  img {
+    pointer-events: none;
+    position: absolute;
+    top: 50%;
+    right: 5.5%;
+    transform: translateY(-50%);
+  }
+}
+
+.darkRoot {
+  input {
+    background: $mirage;
+    color: white;
+    border: 1px solid $ebony;
+  }
+}
+
+.inputWrapper {
+  position: relative;
+}
+
+.dropdown {
+  position: absolute;
+  z-index: 4;
+  top: 110%;
+  width: 100%;
+  box-shadow: 0px 10px 20px rgba(72, 84, 159, 0.25);
+  background: white;
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.option {
+  z-index: 2;
+  @include normalText;
+  padding: 1rem 1.5rem;
+  font-weight: bold;
+  border-bottom: 1px solid $selago;
+  cursor: pointer;
+
+  &:hover {
+    color: $purple;
+  }
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.darkOption {
+  background: $mirage;
+  border-bottom: 1px solid $ebony;
+}
+
+.darkShadow {
+  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.25);
+}

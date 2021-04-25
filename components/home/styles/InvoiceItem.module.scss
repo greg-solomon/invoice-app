@@ -1,5 +1,5 @@
-@import "../../styles/variables";
-@import "../../styles/mixins";
+@import "../../../styles/variables";
+@import "../../../styles/mixins";
 
 .root {
   width: 100%;
@@ -22,6 +22,11 @@
     align-items: center;
     justify-content: space-between;
   }
+}
+
+.darkRoot {
+  background: $mirage;
+  color: white;
 }
 
 .itemOverview {
@@ -86,6 +91,10 @@
   letter-spacing: -0.8px;
 }
 
+.amountDark {
+  color: white;
+}
+
 .date {
   margin-bottom: 0.25rem;
   @include smallText();
@@ -95,6 +104,9 @@
   }
 }
 
+.dateDark {
+  color: white;
+}
 .indicatorWrapper {
   display: flex;
   align-items: center;

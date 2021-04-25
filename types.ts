@@ -19,16 +19,16 @@ export interface Invoice {
     postCode: string;
     country: string;
   };
-  items: [
-    {
-      name: string;
-      quantity: number;
-      price: number;
-      total: number;
-    }
-  ];
+  items: Item[];
   total: number;
 }
+
+export type Item = {
+  name: string;
+  quantity: number;
+  price: number;
+  total: number;
+};
 
 export type ScreenType = "phone" | "tablet" | "desktop";
 

@@ -11,6 +11,6 @@
 }
 
 @mixin container {
-  width: clamp(87.5%, 87.5%, 730px);
+  width: clamp(20rem, 87.5%, 730px);
   margin: 0 auto;
 }

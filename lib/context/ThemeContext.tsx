@@ -1,4 +1,5 @@
 import React from "react";
+import { usePreferredColorScheme } from "../hooks/usePreferredScheme";
 import { useToggle } from "../hooks/useToggle";
 
 interface ThemeState {
@@ -6,11 +7,14 @@ interface ThemeState {
   toggleTheme: () => void;
 }
 
-const ThemeContext = React.createContext<ThemeState>(null);
+const ThemeContext = React.createContext<ThemeState>({
+  dark: false,
+  toggleTheme: () => {},
+});
 
 const ThemeProvider: React.FC = ({ children }) => {
-  // TODO implement preferred theme
-  const [dark, darkHandlers] = useToggle(false);
+  const [preferred] = usePreferredColorScheme();
+  const [dark, darkHandlers] = useToggle(preferred);
 
   const toggleTheme = () => {
     darkHandlers.toggle();

@@ -13,6 +13,14 @@
   @include container;
 }
 
+.darkRoot {
+  background-color: $mirage;
+
+  .statusText {
+    color: white;
+  }
+}
+
 .statusText {
   @include normalText;
   color: $baliHai;

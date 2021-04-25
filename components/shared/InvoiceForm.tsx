@@ -1,13 +1,17 @@
-import { format } from "date-fns";
-import React from "react";
+import React, { useState } from "react";
 import { useScreenContext } from "../../lib/context/ScreenContext";
 import { useInput } from "../../lib/hooks/useInput";
-import { Invoice } from "../../types";
+import { Invoice, Item } from "../../types";
 import { DatePicker } from "../ui/DatePicker";
 import { Heading } from "../ui/Heading";
 import { Input } from "../ui/Input";
 import { SelectDropdown } from "../ui/SelectDropdown";
+import { FormItemList } from "./FormItemList";
+import { format } from "date-fns";
 import styles from "./styles/InvoiceForm.module.scss";
+import { Button } from "../ui/Button";
+import { useThemeContext } from "../../lib/context/ThemeContext";
+import { BackButton } from "./BackButton";
 
 interface InvoiceFormProps {
   editing?: boolean;
@@ -23,19 +27,42 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({
   show,
 }) => {
   const { screenType } = useScreenContext();
-  const [streetAddress, streetAddressHandlers] = useInput(
-    invoice?.clientAddress?.street || ""
-  );
-  const [city, cityHandlers] = useInput(invoice?.clientAddress.city || "");
-  const [postCode, postCodeHandlers] = useInput(
-    invoice?.clientAddress.postCode || ""
-  );
+  const { dark } = useThemeContext();
 
-  const [country, countryHandlers] = useInput(
-    invoice?.clientAddress.country || ""
-  );
+  const initialDate =
+    invoice?.createdAt || format(new Date(Date.now()), "yyyy-MM-dd");
+  const initialFromAddress = invoice?.senderAddress || {
+    country: "",
+    city: "",
+    postCode: "",
+    street: "",
+  };
+  const initialClientName = invoice?.clientName || "";
+  const initialClientAddress = invoice?.clientAddress || {
+    city: "",
+    street: "",
+    postCode: "",
+    country: "",
+  };
+  const initialDescription = invoice?.description || "";
+  const initialClientEmail = invoice?.clientEmail || "";
+  const initialPaymentTerms = invoice?.paymentTerms || 7;
 
-  const [invoiceDate, setInvoiceDate] = React.useState(invoice?.createdAt);
+  const initialItems = invoice?.items
+    ? [...invoice.items, { name: "", quantity: 0, total: 0, price: 0 }]
+    : [{ name: "", quantity: 0, total: 0, price: 0 }];
+
+  const [fromAddress, setFromAddress] = useState(initialFromAddress);
+  const [clientEmail, clientEmailHandlers] = useInput(initialClientEmail);
+  const [clientName, clientNameHandlers] = useInput(initialClientName);
+  const [invoiceDate, setInvoiceDate] = useState(initialDate);
+  const [description, descriptionHandlers] = useInput(initialDescription);
+  const [paymentTerms, setPaymentTerms] = useState(initialPaymentTerms);
+  const [clientAddress, setClientAddress] = useState(initialClientAddress);
+  const [items, setItems] = useState<Item[]>(initialItems);
+  const handlePaymentTermsChange = (newTerms: number) => {
+    setPaymentTerms(newTerms);
+  };
 
   const headingText =
     editing && invoice ? (
@@ -46,64 +73,183 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({
     ) : (
       "New Invoice"
     );
+
+  const bottomClass = [
+    styles.bottomControls,
+    dark ? styles.darkBottom : "",
+  ].join(" ");
   return (
     <>
       <div
-        className={styles.root}
+        className={[styles.root, dark ? styles.darkRoot : ""].join(" ")}
         style={{ transform: show ? "translateX(0%)" : `translateX(-100%)` }}
       >
-        {screenType === "phone" && (
-          <div className={styles.backBtnWrapper}>
-            <button className={styles.backBtn} onClick={cancel}>
-              <img src="/assets/icon-arrow-left.svg" alt="Left Arrow" />
-              <span>Go back</span>
-            </button>
-          </div>
-        )}
-        <div className={styles.content}>
-          <Heading variant="h1">{headingText}</Heading>
-          <p className={styles.colorLabel}>Bill From</p>
-          <Input
-            label="Street Address"
-            value={streetAddress}
-            onChange={streetAddressHandlers.set}
-            name="address"
-          />
-          <div className={styles.flex}>
+        {screenType === "phone" && <BackButton onClick={cancel} />}
+        <form
+          className={[styles.content, dark ? styles.darkContent : ""].join(" ")}
+        >
+          <div className={styles.padding}>
+            <Heading variant="h1">{headingText}</Heading>
+            <p className={styles.colorLabel}>Bill From</p>
             <Input
-              label="City"
-              value={city}
-              onChange={cityHandlers.set}
-              name="city"
+              label="Street Address"
+              value={fromAddress.street}
+              onChange={(e) =>
+                setFromAddress((prev) => ({ ...prev, street: e.target.value }))
+              }
+              name="address"
+            />
+            <div className={styles.inputGrid}>
+              <Input
+                label="City"
+                value={fromAddress.city}
+                onChange={(e) =>
+                  setFromAddress((prev) => ({ ...prev, city: e.target.value }))
+                }
+                name="fromCity"
+              />
+              <Input
+                label="Post Code"
+                value={fromAddress.postCode}
+                onChange={(e) =>
+                  setFromAddress((prev) => ({
+                    ...prev,
+                    postCode: e.target.value,
+                  }))
+                }
+                name="fromPostCode"
+              />
+              <Input
+                label="Country"
+                value={fromAddress.country}
+                onChange={(e) =>
+                  setFromAddress((prev) => ({
+                    ...prev,
+                    country: e.target.value,
+                  }))
+                }
+              />
+            </div>
+            <p className={styles.colorLabel}>Bill To</p>
+
+            <Input
+              label="Client's Name"
+              value={clientName}
+              onChange={clientNameHandlers.set}
             />
             <Input
-              label="Post Code"
-              value={postCode}
-              onChange={postCodeHandlers.set}
-              name="postCode"
+              label="Client's Email"
+              value={clientEmail}
+              onChange={clientEmailHandlers.set}
             />
+
+            <Input
+              label="Street Address"
+              value={clientAddress.street}
+              onChange={(e) =>
+                setClientAddress((prev) => ({
+                  ...prev,
+                  street: e.target.value,
+                }))
+              }
+            />
+            <div className={styles.inputGrid}>
+              <Input
+                label="City"
+                value={clientAddress.city}
+                onChange={(e) =>
+                  setClientAddress((prev) => ({
+                    ...prev,
+                    city: e.target.value,
+                  }))
+                }
+                name="clientCity"
+              />
+              <Input
+                label="Post Code"
+                value={clientAddress.postCode}
+                onChange={(e) =>
+                  setClientAddress((prev) => ({
+                    ...prev,
+                    postCode: e.target.value,
+                  }))
+                }
+                name="clientPostCode"
+              />
+              <Input
+                label="Country"
+                value={clientAddress.country}
+                onChange={(e) =>
+                  setClientAddress((prev) => ({
+                    ...prev,
+                    country: e.target.value,
+                  }))
+                }
+              />
+            </div>
+
+            <div className={styles.dateAndTerms}>
+              <DatePicker
+                label="Invoice Date"
+                value={invoiceDate}
+                setInvoiceDate={setInvoiceDate}
+                disabled={editing}
+              />
+              <SelectDropdown
+                label="Payment Terms"
+                options={[
+                  { label: "Net 1 Day", value: 1 },
+                  { label: "Net 7 Days", value: 7 },
+                  { label: "Net 14 Days", value: 14 },
+                  { label: "Net 30 Days", value: 30 },
+                ]}
+                name="terms"
+                value={paymentTerms}
+                onChange={handlePaymentTermsChange}
+              />
+            </div>
+            <Input
+              label="Project Description"
+              value={description}
+              onChange={descriptionHandlers.set}
+            />
+
+            <FormItemList items={items} setItems={setItems} />
           </div>
-          <Input
-            label="Country"
-            value={country}
-            onChange={countryHandlers.set}
-          />
-          <DatePicker
-            label="Invoice Date"
-            value={invoiceDate || format(new Date(Date.now()), "yyyy-MM-dd")}
-          />
-          <SelectDropdown
-            label="Payment Terms"
-            options={[
-              { label: "Net 1 Day", value: 1 },
-              { label: "Net 7 Days", value: 7 },
-              { label: "Net 14 Days", value: 14 },
-              { label: "Net 30 Days", value: 30 },
-            ]}
-            name="terms"
-            value={invoice?.paymentTerms || 7}
-          />
-        </div>
+
+          <div className={bottomClass}>
+            {editing && (
+              <>
+                <div></div>
+                <div>
+                  <Button variant={2} type="button">
+                    Cancel
+                  </Button>
+                  <Button variant={1} type="submit">
+                    Save Changes
+                  </Button>
+                </div>
+              </>
+            )}
+            {!editing && (
+              <>
+                <div>
+                  <Button variant={2} type="button">
+                    Discard
+                  </Button>
+                </div>
+                <div>
+                  <Button variant={3} type="button">
+                    Save as Draft
+                  </Button>
+                  <Button variant={1} type="submit">
+                    Save & Send
+                  </Button>
+                </div>
+              </>
+            )}
+          </div>
+        </form>
       </div>
       <ModalShadow show={show} cancel={cancel} />
     </>

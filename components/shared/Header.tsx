@@ -1,3 +1,4 @@
+import { useRouter } from "next/router";
 import React from "react";
 import { useThemeContext } from "../../lib/context/ThemeContext";
 import styles from "./styles/Header.module.scss";
@@ -39,8 +40,9 @@ export const Header: React.FC<HeaderProps> = ({}) => {
 };
 
 const HeaderLogo = () => {
+  const router = useRouter();
   return (
-    <div className={styles.headerLogoRoot}>
+    <div className={styles.headerLogoRoot} onClick={() => router.push("/")}>
       <svg xmlns="http://www.w3.org/2000/svg" width="28" height="26">
         <path
           fill="#FFF"

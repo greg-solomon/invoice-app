@@ -2,22 +2,20 @@
 @import "./mixins";
 
 .main {
-  position: relative;
   background-color: $whisper;
-  min-height: 100vh;
   padding-bottom: 6rem;
-  padding-top: 4.5rem;
+  padding-top: 6.5rem;
+  min-height: 100vh;
+  @media (min-width: $tablet) {
+    padding-top: 4.5rem;
+  }
 
   @media (min-width: $desktop) {
     padding-left: 6.4375rem;
-    padding-top: 3rem;
+    padding-top: 0;
   }
 }
 
 .darkMain {
-  background: $mirage2;
-}
-
-.root {
-  padding: 1.5rem;
+  background-color: $mirage2;
 }

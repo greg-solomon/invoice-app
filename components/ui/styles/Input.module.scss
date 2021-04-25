@@ -15,6 +15,17 @@
   }
 }
 
+.darkRoot {
+  label {
+    color: white;
+  }
+  input {
+    color: white;
+    background-color: $mirage;
+    border: 1px solid $ebony;
+  }
+}
+
 .label {
   display: block;
   margin-bottom: 0.75rem;
@@ -24,4 +35,15 @@
 
 .root {
   margin-bottom: 1.5rem;
+  position: relative;
+}
+
+.invalidLabel {
+  color: #ec5757;
+  letter-spacing: -0.21px;
+  line-height: 0.9375rem;
+  position: absolute;
+  font-size: 0.625rem;
+  right: 0%;
+  top: -1%;
 }

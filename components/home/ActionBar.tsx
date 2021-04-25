@@ -5,7 +5,7 @@ import { FilterType, Invoice, ScreenType } from "../../types";
 import { FilterDropdown } from "../ui/FilterDropdown";
 import { Heading } from "../ui/Heading";
 import { PlusButton } from "../ui/PlusButton";
-import styles from "./ActionBar.module.scss";
+import styles from "./styles/ActionBar.module.scss";
 
 interface ActionBarProps {
   screenType: ScreenType;
@@ -25,7 +25,9 @@ export const ActionBar: React.FC<ActionBarProps> = ({
   const { dark } = useThemeContext();
   const { invoices } = useInvoices();
   return (
-    <div className={styles.container}>
+    <div
+      className={[styles.container, dark ? styles.containerDark : ""].join(" ")}
+    >
       <div>
         <Heading variant={screenType === "phone" ? "h2" : "h1"}>
           Invoices
@@ -33,7 +35,7 @@ export const ActionBar: React.FC<ActionBarProps> = ({
         <p className={styles.invoiceOverview}>
           {screenType === "phone"
             ? `${invoices.length} invoices`
-            : `There are ${invoices.length} pending invoices`}
+            : `There are ${invoices.length} total invoices`}
         </p>
       </div>
       <div className={styles.actionControls}>

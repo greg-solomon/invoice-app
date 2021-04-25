@@ -13,7 +13,17 @@
   z-index: 2;
   top: 0;
 
+  @media (min-width: $tablet) {
+  }
+
   @media (min-width: $desktop) {
+    height: 100vh;
+    position: fixed;
+    left: 0;
+    width: 6.4375rem;
+    border-radius: 0px 20px 20px 0px;
+    flex-direction: column;
+    z-index: 3;
   }
 }
 
@@ -28,7 +38,7 @@
   border-radius: 0px 20px 20px 0px;
   position: relative;
   overflow: hidden;
-
+  cursor: pointer;
   svg {
     z-index: 2;
   }
@@ -41,6 +51,16 @@
     background-color: $heliotrope;
     border-radius: 20px 0px 0px 20px;
     top: 50%;
+    transition: 0.3s ease;
+  }
+
+  &:hover::after {
+    top: 10%;
+  }
+
+  @media (min-width: $desktop) {
+    width: 100%;
+    height: 6.4375rem;
   }
 }
 
@@ -49,6 +69,12 @@
   display: flex;
   align-items: center;
   height: 100%;
+
+  @media (min-width: $desktop) {
+    flex-direction: column;
+    width: 100%;
+    height: auto;
+  }
 }
 
 // button
@@ -71,6 +97,11 @@
   align-items: center;
   justify-content: center;
   height: 100%;
+
+  @media (min-width: $desktop) {
+    border-right: none;
+    border-bottom: 1px solid $darkAccent;
+  }
 }
 
 .themeBtnWrapper,
@@ -80,51 +111,19 @@
   align-items: center;
   justify-content: center;
   height: 100%;
+
+  @media (min-width: $tablet) {
+    width: 6rem;
+  }
+
+  @media (min-width: $desktop) {
+    width: 100%;
+    height: 5.5rem;
+  }
 }
 
 .avatarWrapper img {
   width: 2rem;
   height: 2rem;
   border-radius: 50%;
-}
-
-@media (min-width: $tablet) {
-  .themeBtnWrapper,
-  .avatarWrapper {
-    width: 6rem;
-  }
-}
-
-@media (min-width: $desktop) {
-  .headerRoot {
-    height: 100vh;
-    position: fixed;
-    left: 0;
-    width: 6.4375rem;
-    border-radius: 0px 20px 20px 0px;
-    flex-direction: column;
-    z-index: 3;
-  }
-
-  .headerLogoRoot {
-    width: 100%;
-    height: 6.4375rem;
-  }
-
-  .headerControls {
-    flex-direction: column;
-    width: 100%;
-    height: auto;
-  }
-
-  .themeBtnWrapper {
-    border-right: none;
-    border-bottom: 1px solid $darkAccent;
-  }
-
-  .themeBtnWrapper,
-  .avatarWrapper {
-    width: 100%;
-    height: 5.5rem;
-  }
 }

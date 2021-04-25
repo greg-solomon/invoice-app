@@ -1,4 +1,5 @@
 import React from "react";
+import { useThemeContext } from "../../lib/context/ThemeContext";
 import styles from "./styles/Button.module.scss";
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -6,35 +7,70 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 export const Button: React.FC<ButtonProps> = ({ variant, ...props }) => {
+  const { dark } = useThemeContext();
+
   switch (variant) {
     case 1:
+      // button 2 in design spec
       return (
-        <button {...props} className={styles.purpleButton}>
+        <button
+          {...props}
+          className={[styles.purpleButton, props.className].join(" ")}
+        >
           {props.children}
         </button>
       );
     case 2:
+      // button 3 in design spec
       return (
-        <button {...props} className={styles.lightBtn}>
+        <button
+          {...props}
+          className={[
+            styles.lightBtn,
+            dark ? styles.darkLightBtn : "",
+            props.className,
+          ].join(" ")}
+        >
           {props.children}
         </button>
       );
     case 3:
+      // button 4 in design spec
+
       return (
-        <button {...props} className={styles.darkBtn}>
+        <button
+          {...props}
+          className={[
+            styles.darkBtn,
+            dark ? styles.darkDarkBtn : "",
+            props.className,
+          ].join(" ")}
+        >
           {props.children}
         </button>
       );
     case 4:
+      // button 5 in design spec
       return (
-        <button {...props} className={styles.orangeBtn}>
+        <button
+          {...props}
+          className={[styles.orangeBtn, props.className].join(" ")}
+        >
           {props.children}
         </button>
       );
     case 5:
     default:
+      // button 6 in design spec
       return (
-        <button {...props} className={styles.longBtn}>
+        <button
+          {...props}
+          className={[
+            styles.longBtn,
+            dark ? styles.darkLongBtn : "",
+            props.className,
+          ].join(" ")}
+        >
           {props.children}
         </button>
       );

@@ -1,4 +1,5 @@
 import React from "react";
+import { useThemeContext } from "../../lib/context/ThemeContext";
 import { Controls } from "./Controls";
 import styles from "./styles/BottomControls.module.scss";
 interface BottomControlsProps {
@@ -8,8 +9,9 @@ interface BottomControlsProps {
 }
 
 export const BottomControls: React.FC<BottomControlsProps> = (props) => {
+  const { dark } = useThemeContext();
   return (
-    <div className={styles.root}>
+    <div className={[styles.root, dark ? styles.dark : ""].join(" ")}>
       <Controls {...props} />
     </div>
   );

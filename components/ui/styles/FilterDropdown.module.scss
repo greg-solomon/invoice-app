@@ -1,11 +1,14 @@
+@import "../../../styles/variables";
+
 .root {
   font-weight: bold;
   font-size: 0.75rem;
-  margin-right: 0.75rem;
+  margin-right: 1rem;
   position: relative;
   cursor: pointer;
   svg {
     margin-left: 0.75rem;
+    transition: 0.3s ease;
   }
 }
 
@@ -16,7 +19,7 @@
   width: 12rem;
   height: 8rem;
   top: 100%;
-  left: 50%;
+  left: 30%;
   transform: translateX(-50%);
   display: flex;
   flex-flow: column;
@@ -26,4 +29,13 @@
   div {
     margin-bottom: 0.75rem;
   }
+}
+
+.darkRoot {
+  color: white;
+}
+
+.darkDropdown {
+  background-color: $ebony;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25);
 }

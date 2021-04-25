@@ -14,17 +14,6 @@ a {
   margin: 0;
 }
 
-main {
-  position: relative;
-  background-color: $whisper;
-  min-height: 100vh;
-  padding-bottom: 6rem;
-  padding-top: 5rem;
-  @media (min-width: $desktop) {
-    padding-left: 6.4375rem;
-  }
-}
-
 button {
   cursor: pointer;
 }

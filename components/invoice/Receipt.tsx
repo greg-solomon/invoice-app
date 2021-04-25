@@ -1,5 +1,6 @@
 import React from "react";
 import { useScreenContext } from "../../lib/context/ScreenContext";
+import { useThemeContext } from "../../lib/context/ThemeContext";
 import { Invoice, ScreenType } from "../../types";
 import { Heading } from "../ui/Heading";
 import styles from "./styles/Receipt.module.scss";
@@ -20,6 +21,7 @@ interface ReceiptItemProps {
 
 export const Receipt: React.FC<ReceiptProps> = ({ invoice }) => {
   const { screenType } = useScreenContext();
+  const { dark } = useThemeContext();
 
   const totalString = new Intl.NumberFormat("en-US", {
     style: "currency",
@@ -29,7 +31,7 @@ export const Receipt: React.FC<ReceiptProps> = ({ invoice }) => {
   switch (screenType) {
     case "phone":
       return (
-        <div className={styles.root}>
+        <div className={[styles.root, dark ? styles.darkRoot : ""].join(" ")}>
           <div className={styles.padding}>
             {invoice.items.map((item) => (
               <ReceiptItem
@@ -39,7 +41,11 @@ export const Receipt: React.FC<ReceiptProps> = ({ invoice }) => {
               />
             ))}
           </div>
-          <div className={styles.subTotal}>
+          <div
+            className={[styles.subTotal, dark ? styles.darkSubTotal : ""].join(
+              " "
+            )}
+          >
             <p className={styles.totalLabel}>Grand Total</p>
             <Heading variant="h2">{totalString}</Heading>
           </div>
@@ -50,7 +56,11 @@ export const Receipt: React.FC<ReceiptProps> = ({ invoice }) => {
     default:
       return (
         <>
-          <table className={styles.receiptTable}>
+          <table
+            className={[styles.receiptTable, dark ? styles.darkTable : ""].join(
+              " "
+            )}
+          >
             <thead>
               <tr>
                 <td>Item Name</td>
@@ -80,7 +90,11 @@ export const Receipt: React.FC<ReceiptProps> = ({ invoice }) => {
               ))}
             </tbody>
           </table>
-          <div className={styles.subTotal}>
+          <div
+            className={[styles.subTotal, dark ? styles.darkSubTotal : ""].join(
+              " "
+            )}
+          >
             <p className={styles.totalLabel}>Amount Due</p>
             <Heading variant="h2">{totalString}</Heading>
           </div>
