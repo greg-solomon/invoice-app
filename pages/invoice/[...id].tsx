@@ -12,13 +12,16 @@ import { InvoiceForm } from "../../components/shared/InvoiceForm";
 import { useThemeContext } from "../../lib/context/ThemeContext";
 import styles from "../../styles/InvoicePage.module.scss";
 import { BackButton } from "../../components/shared/BackButton";
+import { DeleteModal } from "../../components/invoice/DeleteModal";
 
 interface InvoicePageProps {}
 
 const InvoicePage: React.FC<InvoicePageProps> = (props) => {
+  const { deleteInvoice } = useInvoices();
   const router = useRouter();
   const [invoice, setInvoice] = React.useState<Invoice | null>(null);
   const [isEditing, setEditing] = useToggle(false);
+  const [deleting, deletingHandlers] = useToggle(false);
   const { invoices } = useInvoices();
   const { screenType } = useScreenContext();
   const { dark } = useThemeContext();
@@ -34,6 +37,10 @@ const InvoicePage: React.FC<InvoicePageProps> = (props) => {
 
   React.useEffect(setInvoiceEffect, [id]);
 
+  const handleDeletion = (id: string) => {
+    deleteInvoice(id);
+    router.replace("/");
+  };
   return (
     <main
       role="main"
@@ -57,11 +64,22 @@ const InvoicePage: React.FC<InvoicePageProps> = (props) => {
           status={invoice.status}
           screenType={screenType}
           onClickEditing={setEditing.toggle}
+          onClickDelete={deletingHandlers.on}
         />
       )}
       {invoice && <Summary invoice={invoice} />}
       {screenType === "phone" && (
-        <BottomControls onClickEditing={setEditing.toggle} />
+        <BottomControls
+          onClickEditing={setEditing.toggle}
+          onClickDelete={deletingHandlers.on}
+        />
+      )}
+      {deleting && invoice && (
+        <DeleteModal
+          id={invoice.id}
+          onConfirm={() => handleDeletion(invoice.id)}
+          onCancel={deletingHandlers.off}
+        />
       )}
     </main>
   );

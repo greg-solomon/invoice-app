@@ -16,6 +16,10 @@ const ThemeProvider: React.FC = ({ children }) => {
   const [preferred] = usePreferredColorScheme();
   const [dark, darkHandlers] = useToggle(preferred);
 
+  React.useEffect(() => {
+    if (preferred) darkHandlers.on();
+    else darkHandlers.off();
+  }, [preferred]);
   const toggleTheme = () => {
     darkHandlers.toggle();
   };
