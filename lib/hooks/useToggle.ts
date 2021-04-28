@@ -1,10 +1,6 @@
 import React from "react";
+import { ToggleHandlers } from "../../types";
 
-type ToggleHandlers = {
-  on: () => void;
-  off: () => void;
-  toggle: () => void;
-};
 function useToggle(initialState: boolean = false): [boolean, ToggleHandlers] {
   const [toggle, set] = React.useState(initialState);
 

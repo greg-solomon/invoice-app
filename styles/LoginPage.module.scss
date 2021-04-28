@@ -1,0 +1,59 @@
+@import "./variables";
+@import "./mixins";
+
+.main {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: $whisper;
+  color: $vulcan;
+}
+
+.loginContainer {
+  width: 100%;
+  margin: 0 auto;
+  max-width: 360px;
+  border-radius: 0.5rem;
+  padding: 3rem 1rem;
+  background-color: white;
+  color: $vulcan;
+  text-align: center;
+
+  h1 {
+    margin-bottom: 1rem;
+  }
+  p {
+    @include normalText;
+    font-size: 14px;
+    line-height: 1.5rem;
+    margin-bottom: 0.75rem;
+  }
+
+  a {
+    color: $purple;
+  }
+}
+
+.dark {
+  background: $mirage2;
+  color: white;
+}
+
+.darkContainer {
+  background: $mirage;
+  color: white;
+}
+
+.flex {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1rem;
+
+  button {
+    margin-left: 0.5rem;
+    width: 50%;
+  }
+}

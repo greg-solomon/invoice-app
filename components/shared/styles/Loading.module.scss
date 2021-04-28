@@ -1,0 +1,14 @@
+@import "../../../styles/variables";
+
+.root {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background-color: $whisper;
+}
+
+.darkRoot {
+  color: white;
+  background: $mirage;
+}

@@ -38,3 +38,9 @@ export type FilterType = {
 };
 
 export type ItemStatus = "draft" | "pending" | "paid";
+
+export type ToggleHandlers = {
+  on: () => void;
+  off: () => void;
+  toggle: () => void;
+};

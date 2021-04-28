@@ -8,8 +8,13 @@ import { useToggle } from "../lib/hooks/useToggle";
 import { useScreenContext } from "../lib/context/ScreenContext";
 import { InvoiceForm } from "../components/shared/InvoiceForm";
 import styles from "../styles/HomePage.module.scss";
+import { useSession } from "next-auth/client";
+import { useRouter } from "next/router";
+import { useInvoices } from "../lib/context/InvoiceContext";
 
 export default function Home() {
+  const [session, loading] = useSession();
+  const router = useRouter();
   const [draftFilter, draftFilterHandler] = useToggle();
   const [pendingFilter, pendingFilterHandler] = useToggle();
   const [paidFilter, paidFilterHandler] = useToggle();
@@ -17,6 +22,7 @@ export default function Home() {
   const [activeFilters, setActiveFilters] = React.useState<ItemStatus[]>([]);
   const { screenType } = useScreenContext();
   const { dark } = useThemeContext();
+  const { isDemo } = useInvoices();
   const updateFiltersEffect = () => {
     let filters: ItemStatus[] = [];
 
@@ -26,6 +32,12 @@ export default function Home() {
 
     setActiveFilters(filters);
   };
+
+  React.useEffect(() => {
+    if (!session && !isDemo) {
+      router.replace("/login");
+    }
+  }, [session, isDemo]);
 
   React.useEffect(updateFiltersEffect, [
     paidFilter,
@@ -53,6 +65,13 @@ export default function Home() {
       },
     },
   };
+
+  if (loading)
+    return (
+      <main>
+        <p>Loading...</p>
+      </main>
+    );
   return (
     <>
       <main
