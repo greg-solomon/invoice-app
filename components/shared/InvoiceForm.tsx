@@ -1,13 +1,11 @@
 import React, { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { useScreenContext } from "../../lib/context/ScreenContext";
-import { useInput } from "../../lib/hooks/useInput";
 import { Invoice, Item } from "../../types";
 import { DatePicker } from "../ui/DatePicker";
 import { Heading } from "../ui/Heading";
 import { Input } from "../ui/Input";
 import { SelectDropdown } from "../ui/SelectDropdown";
 import { FormItemList } from "./FormItemList";
-import { format } from "date-fns";
 import styles from "./styles/InvoiceForm.module.scss";
 import { Button } from "../ui/Button";
 import { useThemeContext } from "../../lib/context/ThemeContext";
@@ -44,6 +42,9 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({
     setData((prev) => ({
       ...prev,
       items,
+      total: items
+        .map((item) => +item.total)
+        .reduce((acc, val) => (acc += val)),
     }));
   }, [items]);
 
@@ -73,6 +74,7 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({
     }
 
     setData(emptyInvoice());
+    setItems([{ name: "New Item", quantity: 1, total: 0, price: 0 }]);
     cancel();
   };
 
@@ -92,9 +94,7 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({
       return;
     }
     if (editing) {
-      console.log(`Editing`);
       editInvoice(data.id, { ...data, status: "pending" });
-      console.log(`Status should be pending...`);
       setData({ ...data, status: "pending" });
       e.preventDefault();
       cancel();

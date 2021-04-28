@@ -23,6 +23,10 @@
   }
 }
 
+.darkRoot h2 {
+  color: white;
+}
+
 .emptyText {
   @include normalText();
   text-align: center;

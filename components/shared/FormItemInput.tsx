@@ -1,33 +1,35 @@
 import React, { ChangeEvent } from "react";
 import { useThemeContext } from "../../lib/context/ThemeContext";
 import { Item } from "../../types";
-import { Input } from "../ui/Input";
+import { Input, InputProps } from "../ui/Input";
 import styles from "./styles/FormItemList.module.scss";
 
 interface FormItemInputProps {
-  item?: Item;
+  item: Item;
   onDelete: () => void;
   onQuantityChange: (e: ChangeEvent<HTMLInputElement>) => void;
   onNameChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  onPriceChange: (e: ChangeEvent<HTMLInputElement>) => void;
 }
 
 export const FormItemInput: React.FC<FormItemInputProps> = ({
   item,
   onDelete,
   onNameChange,
+  onPriceChange,
   onQuantityChange,
 }) => {
   const { dark } = useThemeContext();
-  const [quantity, setQuantity] = React.useState(item?.quantity || 1);
-  const [price, setPrice] = React.useState<number>(item?.price || 0);
-  const [total, setTotal] = React.useState(price * quantity);
+  const [quantity, setQuantity] = React.useState(item.quantity);
+  const [price, setPrice] = React.useState(String(item.price));
+  const [total, setTotal] = React.useState(+price * quantity);
 
   React.useEffect(() => {
-    setTotal(price * quantity);
+    setTotal(+price * quantity);
   }, [quantity, price]);
 
   const nameProps = {
-    value: item?.name,
+    value: item.name,
     label: "Item Name",
     onChange: onNameChange,
     className: styles.nameInput,
@@ -35,14 +37,23 @@ export const FormItemInput: React.FC<FormItemInputProps> = ({
 
   const quantityProps = {
     value: quantity,
-    onChange: (e: ChangeEvent<HTMLInputElement>) =>
-      setQuantity(+e.target.value),
+    onChange: (e: ChangeEvent<HTMLInputElement>) => {
+      setQuantity(+e.target.value);
+      onQuantityChange(e);
+    },
     label: "Qty.",
   };
 
-  const priceProps = {
-    value: price.toFixed(2),
-    onChange: (e: ChangeEvent<HTMLInputElement>) => setPrice(+e.target.value),
+  const priceProps: InputProps = {
+    value: price,
+    onChange: (e: ChangeEvent<HTMLInputElement>) => {
+      const str = e.target.value.replace(/[^0-9\.]/g, "");
+      setPrice(str);
+      onPriceChange(e);
+    },
+    onBlur: (e) => {
+      setPrice((prev) => (+prev).toFixed(2));
+    },
     label: "Price",
   };
 
@@ -52,16 +63,18 @@ export const FormItemInput: React.FC<FormItemInputProps> = ({
     value: total.toFixed(2),
     onChange: () => {},
   };
+
+  const inputRowClass = [
+    styles.priceInfo,
+    dark ? styles.darkPriceInfo : "",
+  ].join(" ");
+
   return (
     <div className={styles.item}>
       <Input {...nameProps} />
-      <div
-        className={[styles.priceInfo, dark ? styles.darkPriceInfo : ""].join(
-          " "
-        )}
-      >
+      <div className={inputRowClass}>
         <Input {...quantityProps} />
-        <Input {...priceProps} onChange={(e) => onQuantityChange(e)} />
+        <Input {...priceProps} />
         <Input {...totalProps} />
         <button onClick={onDelete} className={styles.deleteBtn}>
           <DeleteSVG />

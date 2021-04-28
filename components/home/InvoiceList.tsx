@@ -4,6 +4,7 @@ import { InvoiceItem } from "./InvoiceItem";
 import { Heading } from "../ui/Heading";
 import { useInvoices } from "../../lib/context/InvoiceContext";
 import styles from "./styles/InvoiceList.module.scss";
+import { useThemeContext } from "../../lib/context/ThemeContext";
 
 interface InvoiceListProps {
   filters: ItemStatus[];
@@ -15,11 +16,14 @@ export const InvoiceList: React.FC<InvoiceListProps> = ({
   screenType,
 }) => {
   const { invoices } = useInvoices();
+  const { dark } = useThemeContext();
   let content;
 
   if (invoices.length === 0) {
     content = (
-      <div className={styles.emptyRoot}>
+      <div
+        className={[styles.emptyRoot, dark ? styles.darkRoot : ""].join(" ")}
+      >
         <img src="/assets/illustration-empty.svg" alt="Empty Illustration" />
         <Heading variant="h2">There is nothing here</Heading>
         <p className={styles.emptyText}>

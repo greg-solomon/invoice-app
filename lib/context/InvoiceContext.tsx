@@ -1,6 +1,6 @@
 import React from "react";
 import { Invoice } from "../../types";
-import data from "../../public/data.json";
+import exampleData from "../../public/data.json";
 
 interface InvoiceState {
   invoices: Invoice[];
@@ -17,12 +17,29 @@ const InvoiceContext = React.createContext<InvoiceState>({
 });
 
 const InvoiceProvider: React.FC = ({ children }) => {
-  const [invoices, setInvoices] = React.useState<Invoice[]>(data as Invoice[]);
+  const [isDemo, setDemo] = React.useState(true);
+  const [hasVisitedApp, setHasVisitedApp] = React.useState(true);
+  const [invoices, setInvoices] = React.useState<Invoice[]>([]);
+
+  React.useEffect(() => {}, [hasVisitedApp]);
 
   React.useEffect(() => {
-    localStorage.setItem("invoices", JSON.stringify(invoices));
-  }, [invoices]);
+    const hasVisited = getVisitInformation();
+    if (!hasVisited) {
+      localStorage.setItem("visited", JSON.stringify(true));
+    }
+    setHasVisitedApp(hasVisited);
+    const initialInvoices = getInvoices(isDemo, hasVisited);
 
+    setInvoices(initialInvoices);
+  }, []);
+
+  React.useEffect(() => {
+    if (isDemo) {
+      localStorage.setItem("invoices", JSON.stringify(invoices));
+      console.log(`Storing item...`);
+    }
+  }, [invoices]);
   const deleteInvoice = (id: string) => {
     setInvoices((prev) => prev.filter((invoice) => invoice.id !== id));
   };
@@ -55,3 +72,24 @@ const InvoiceProvider: React.FC = ({ children }) => {
 const useInvoices = () => React.useContext(InvoiceContext);
 
 export { InvoiceProvider, InvoiceContext, useInvoices };
+
+function getInvoices(isDemo: boolean, hasVisitedApp: boolean): Invoice[] {
+  if (isDemo && !hasVisitedApp) return exampleData as Invoice[];
+  if (isDemo) {
+    const storedString = localStorage.getItem("invoices");
+    if (storedString) {
+      const storedInvoices = JSON.parse(storedString) as Invoice[];
+      console.log({ storedInvoices });
+      return storedInvoices;
+    }
+  }
+  return [];
+}
+
+function getVisitInformation(): boolean {
+  const fetched = localStorage.getItem("visited");
+  if (fetched) {
+    return JSON.parse(fetched) as boolean;
+  }
+  return false;
+}

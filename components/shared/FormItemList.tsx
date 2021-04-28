@@ -1,3 +1,4 @@
+import et from "date-fns/esm/locale/et/index.js";
 import React, { ChangeEvent } from "react";
 import { useThemeContext } from "../../lib/context/ThemeContext";
 import { Item } from "../../types";
@@ -31,10 +32,27 @@ export const FormItemList: React.FC<FormItemListProps> = ({
           return {
             ...item,
             quantity: +e.target.value,
+            total: +e.target.value * item.price,
           };
         } else {
           return item;
         }
+      })
+    );
+  };
+
+  const handlePriceChange = (e: ChangeEvent<HTMLInputElement>, i: number) => {
+    setItems((prev) =>
+      prev.map((item, index) => {
+        if (index === i) {
+          return {
+            ...item,
+            price: +e.target.value,
+            total: +e.target.value * item.quantity,
+          };
+        }
+
+        return item;
       })
     );
   };
@@ -73,6 +91,7 @@ export const FormItemList: React.FC<FormItemListProps> = ({
           onNameChange={(e: ChangeEvent<HTMLInputElement>) =>
             handleNameChange(i, e)
           }
+          onPriceChange={(e) => handlePriceChange(e, i)}
           onQuantityChange={(e) => handleQuantityChange(e, i)}
           onDelete={() => handleItemDelete(i)}
         />

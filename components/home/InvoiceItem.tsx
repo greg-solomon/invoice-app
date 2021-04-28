@@ -22,13 +22,9 @@ export const InvoiceItem: React.FC<InvoiceItemProps> = ({
     currency: "USD",
   };
 
-  const formatFn = invoice.items
-    .map((item) => +item.total)
-    .reduce((acc, val) => (acc += val));
-
   const currencyFmt = new Intl.NumberFormat("en-US", currencyOptions);
 
-  const currencyString = currencyFmt.format(formatFn);
+  const currencyString = currencyFmt.format(invoice.total);
 
   const nameClass = [styles.clientName, dark ? styles.dateDark : ""].join(" ");
   const dateClass = [styles.date, dark ? styles.dateDark : ""].join(" ");

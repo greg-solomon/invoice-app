@@ -3,7 +3,8 @@ import { useThemeContext } from "../../lib/context/ThemeContext";
 import { useToggle } from "../../lib/hooks/useToggle";
 import styles from "./styles/Input.module.scss";
 
-interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+export interface InputProps
+  extends React.InputHTMLAttributes<HTMLInputElement> {
   label: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
