@@ -1,24 +1,9 @@
 @import "../../../styles/mixins";
 @import "../../../styles/variables";
 
-.purpleButton,
-.lightBtn,
-.darkBtn,
-.orangeBtn,
-.longBtn {
-  height: 3rem;
-  padding: 0 1.5rem;
-  border-radius: 1.5rem;
-  border: none;
-  transition: 0.2s all ease;
-  white-space: nowrap;
-  @include normalText;
-  font-weight: bold;
-}
-
 .purpleButton {
+  @include button;
   background: $purple;
-
   color: white;
 
   &:hover {
@@ -27,6 +12,7 @@
 }
 
 .lightBtn {
+  @include button;
   background: #f9fafe;
   color: $shipCove;
 
@@ -36,6 +22,7 @@
 }
 
 .darkLightBtn {
+  @include button;
   background: $ebony;
   color: white;
 
@@ -46,6 +33,7 @@
 }
 
 .orangeBtn {
+  @include button;
   background: $burntSienna;
   color: white;
 
@@ -55,6 +43,7 @@
 }
 
 .darkBtn {
+  @include button;
   background: #373b53;
   color: $baliHai;
 
@@ -72,6 +61,7 @@
 }
 
 .longBtn {
+  @include button;
   background: #f9fafe;
   color: $shipCove;
   width: 100%;

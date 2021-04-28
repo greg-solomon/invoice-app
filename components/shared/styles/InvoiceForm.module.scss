@@ -100,13 +100,13 @@
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: 1fr;
     div:nth-child(0) {
-      grid-area: 1 / 1 / 2 / 2;
+      grid-area: auto;
     }
     div:nth-child(1) {
-      grid-area: 1 / 2 / 2 / 3;
+      grid-area: auto;
     }
     div:nth-child(2) {
-      grid-area: 1 / 3 / 2 / 4;
+      grid-area: auto;
     }
   }
 }

@@ -28,7 +28,6 @@ const InvoiceProvider: React.FC = ({ children }) => {
   };
 
   const addInvoice = (newInvoice: Invoice) => {
-    // todo generate unique ID
     setInvoices((prev) => [...prev, newInvoice]);
   };
 
@@ -55,4 +54,4 @@ const InvoiceProvider: React.FC = ({ children }) => {
 
 const useInvoices = () => React.useContext(InvoiceContext);
 
-export { InvoiceProvider, useInvoices };
+export { InvoiceProvider, InvoiceContext, useInvoices };

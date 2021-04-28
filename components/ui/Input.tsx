@@ -34,15 +34,18 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
       ...props,
       onChange: handleChange,
       ref: ref,
-      required: true,
       onInvalid: handleInvalid,
+      required: true,
     };
+
+    const rootClass = [
+      styles.root,
+      dark ? styles.darkRoot : "",
+      className,
+    ].join(" ");
+
     return (
-      <div
-        className={[styles.root, dark ? styles.darkRoot : "", className].join(
-          " "
-        )}
-      >
+      <div className={rootClass}>
         <label htmlFor={props.name} className={styles.label}>
           {label}
         </label>

@@ -15,6 +15,7 @@ export const Button: React.FC<ButtonProps> = ({ variant, ...props }) => {
       return (
         <button
           {...props}
+          role="button"
           className={[styles.purpleButton, props.className].join(" ")}
         >
           {props.children}
@@ -25,6 +26,7 @@ export const Button: React.FC<ButtonProps> = ({ variant, ...props }) => {
       return (
         <button
           {...props}
+          role="button"
           className={[
             styles.lightBtn,
             dark ? styles.darkLightBtn : "",
@@ -40,6 +42,7 @@ export const Button: React.FC<ButtonProps> = ({ variant, ...props }) => {
       return (
         <button
           {...props}
+          role="button"
           className={[
             styles.darkBtn,
             dark ? styles.darkDarkBtn : "",
@@ -54,6 +57,7 @@ export const Button: React.FC<ButtonProps> = ({ variant, ...props }) => {
       return (
         <button
           {...props}
+          role="button"
           className={[styles.orangeBtn, props.className].join(" ")}
         >
           {props.children}
@@ -64,6 +68,7 @@ export const Button: React.FC<ButtonProps> = ({ variant, ...props }) => {
       // button 6 in design spec
       return (
         <button
+          role="button"
           {...props}
           className={[
             styles.longBtn,

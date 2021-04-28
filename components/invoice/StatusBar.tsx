@@ -10,7 +10,7 @@ interface StatusBarProps {
   screenType: ScreenType;
   onClickEditing: () => void;
   onClickDelete: () => void;
-  onClickPaid?: () => void;
+  onClickPaid: () => void;
 }
 
 export const StatusBar: React.FC<StatusBarProps> = ({
@@ -18,6 +18,7 @@ export const StatusBar: React.FC<StatusBarProps> = ({
   screenType,
   onClickEditing,
   onClickDelete,
+  onClickPaid,
 }) => {
   const { dark } = useThemeContext();
   return (
@@ -28,8 +29,10 @@ export const StatusBar: React.FC<StatusBarProps> = ({
       </div>
       {screenType !== "phone" && (
         <Controls
+          status={status}
           onClickEditing={onClickEditing}
           onClickDelete={onClickDelete}
+          onClickPaid={onClickPaid}
         />
       )}
     </div>

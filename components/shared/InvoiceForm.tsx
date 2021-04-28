@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { useScreenContext } from "../../lib/context/ScreenContext";
 import { useInput } from "../../lib/hooks/useInput";
 import { Invoice, Item } from "../../types";
@@ -12,6 +12,10 @@ import styles from "./styles/InvoiceForm.module.scss";
 import { Button } from "../ui/Button";
 import { useThemeContext } from "../../lib/context/ThemeContext";
 import { BackButton } from "./BackButton";
+import { emptyInvoice } from "../../lib/utils/emptyInvoice";
+import { useInvoices } from "../../lib/context/InvoiceContext";
+import { createID } from "../../lib/utils/createID";
+import { IDIsUnique } from "../../lib/utils/IDisUnique";
 
 interface InvoiceFormProps {
   editing?: boolean;
@@ -26,203 +30,325 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({
   cancel,
   show,
 }) => {
+  const { addInvoice, invoices, editInvoice } = useInvoices();
   const { screenType } = useScreenContext();
   const { dark } = useThemeContext();
 
-  const initialDate =
-    invoice?.createdAt || format(new Date(Date.now()), "yyyy-MM-dd");
-  const initialFromAddress = invoice?.senderAddress || {
-    country: "",
-    city: "",
-    postCode: "",
-    street: "",
-  };
-  const initialClientName = invoice?.clientName || "";
-  const initialClientAddress = invoice?.clientAddress || {
-    city: "",
-    street: "",
-    postCode: "",
-    country: "",
-  };
-  const initialDescription = invoice?.description || "";
-  const initialClientEmail = invoice?.clientEmail || "";
-  const initialPaymentTerms = invoice?.paymentTerms || 7;
+  const [data, setData] = useState(invoice || emptyInvoice());
+  const [items, setItems] = useState(
+    invoice?.items || [{ name: "New Item", quantity: 1, total: 0, price: 0 }]
+  );
 
-  const initialItems = invoice?.items
-    ? [...invoice.items, { name: "", quantity: 0, total: 0, price: 0 }]
-    : [{ name: "", quantity: 0, total: 0, price: 0 }];
+  useEffect(() => {
+    // update items in form data
+    setData((prev) => ({
+      ...prev,
+      items,
+    }));
+  }, [items]);
 
-  const [fromAddress, setFromAddress] = useState(initialFromAddress);
-  const [clientEmail, clientEmailHandlers] = useInput(initialClientEmail);
-  const [clientName, clientNameHandlers] = useInput(initialClientName);
-  const [invoiceDate, setInvoiceDate] = useState(initialDate);
-  const [description, descriptionHandlers] = useInput(initialDescription);
-  const [paymentTerms, setPaymentTerms] = useState(initialPaymentTerms);
-  const [clientAddress, setClientAddress] = useState(initialClientAddress);
-  const [items, setItems] = useState<Item[]>(initialItems);
+  /* HANDLERS */
   const handlePaymentTermsChange = (newTerms: number) => {
-    setPaymentTerms(newTerms);
+    setData((prev) => ({
+      ...prev,
+      paymentTerms: newTerms,
+    }));
   };
 
-  const headingText =
-    editing && invoice ? (
-      <>
-        Edit <span>#</span>
-        {invoice.id}
-      </>
-    ) : (
-      "New Invoice"
-    );
+  const handleSaveAsDraft = () => {
+    // if there is no ID for the invoice, create it
+    if (!data.id) {
+      // create ID
+      let id = createID();
+      const ids = invoices.map((inv) => inv.id);
+
+      // make sure ID is unique to the user
+      while (!IDIsUnique(id, ids)) {
+        id = createID();
+      }
+
+      addInvoice({ ...data, id });
+    } else {
+      addInvoice(data);
+    }
+
+    setData(emptyInvoice());
+    cancel();
+  };
+
+  const handleSaveInvoice: React.FormEventHandler<HTMLFormElement> = (e) => {
+    if (!data.id) {
+      let id = createID();
+      const ids = invoices.map((inv) => inv.id);
+
+      while (!IDIsUnique(id, ids)) {
+        id = createID();
+      }
+
+      setData((prev) => ({ ...prev, id, status: "pending" }));
+      addInvoice({ ...data, status: "pending", id });
+      e.preventDefault();
+      cancel();
+      return;
+    }
+    if (editing) {
+      console.log(`Editing`);
+      editInvoice(data.id, { ...data, status: "pending" });
+      console.log(`Status should be pending...`);
+      setData({ ...data, status: "pending" });
+      e.preventDefault();
+      cancel();
+      return;
+    } else {
+      addInvoice({ ...data, status: "pending" });
+      setData({ ...data, status: "pending" });
+      e.preventDefault();
+      cancel();
+      return;
+    }
+  };
+
+  const handleCancel = () => {
+    // reset data and cancel
+    if (invoice) {
+      setData(invoice);
+    }
+    cancel();
+  };
+
+  /* END OF HANDLERS */
 
   const bottomClass = [
     styles.bottomControls,
     dark ? styles.darkBottom : "",
   ].join(" ");
+
+  const rootDivProps = {
+    className: [styles.root, dark ? styles.darkRoot : ""].join(" "),
+    style: { transform: show ? "translateX(0%)" : `translateX(-100%)` },
+  };
+
+  const formProps = {
+    className: [styles.content, dark ? styles.darkContent : ""].join(" "),
+    onSubmit: handleSaveInvoice,
+  };
+
+  // bill from input props
+  const fromStreetInputProps = {
+    label: "Street Address",
+    value: data.senderAddress.street,
+    onChange: (e: ChangeEvent<HTMLInputElement>) =>
+      setData((prev) => ({
+        ...prev,
+        senderAddress: {
+          ...prev.senderAddress,
+          street: e.target.value,
+        },
+      })),
+    name: "address",
+  };
+
+  const fromCityInputProps = {
+    label: "City",
+    value: data.senderAddress.city,
+    onChange: (e: ChangeEvent<HTMLInputElement>) =>
+      setData((prev) => ({
+        ...prev,
+        senderAddress: {
+          ...prev.senderAddress,
+          city: e.target.value,
+        },
+      })),
+
+    name: "fromCity",
+  };
+
+  const fromPostCodeInputProps = {
+    label: "Post Code",
+    value: data.senderAddress.postCode,
+    onChange: (e: ChangeEvent<HTMLInputElement>) =>
+      setData((prev) => ({
+        ...prev,
+        senderAddress: {
+          ...prev.senderAddress,
+          postCode: e.target.value,
+        },
+      })),
+
+    name: "fromPostCode",
+  };
+
+  const fromCountryInputProps = {
+    label: "Country",
+    value: data.senderAddress.country,
+    onChange: (e: ChangeEvent<HTMLInputElement>) =>
+      setData((prev) => ({
+        ...prev,
+        senderAddress: {
+          ...prev.senderAddress,
+          country: e.target.value,
+        },
+      })),
+  };
+  /* end of bill from props */
+
+  // bill to input props
+  const clientNameInputProps = {
+    label: "Client's Name",
+    value: data.clientName,
+    onChange: (e: ChangeEvent<HTMLInputElement>) => {
+      setData((prev) => ({
+        ...prev,
+        clientName: e.target.value,
+      }));
+    },
+  };
+
+  const clientEmailInputProps = {
+    label: "Client's Email",
+    value: data.clientEmail,
+    onChange: (e: ChangeEvent<HTMLInputElement>) => {
+      setData((prev) => ({
+        ...prev,
+        clientEmail: e.target.value,
+      }));
+    },
+  };
+
+  const clientAddressInputProps = {
+    label: "Street Address",
+    value: data.clientAddress.street,
+    onChange: (e: ChangeEvent<HTMLInputElement>) =>
+      setData((prev) => ({
+        ...prev,
+        clientAddress: {
+          ...prev.clientAddress,
+          street: e.target.value,
+        },
+      })),
+  };
+
+  const clientCityInputProps = {
+    label: "City",
+    value: data.clientAddress.city,
+    onChange: (e: ChangeEvent<HTMLInputElement>) =>
+      setData((prev) => ({
+        ...prev,
+        clientAddress: {
+          ...prev.clientAddress,
+          city: e.target.value,
+        },
+      })),
+    name: "clientCity",
+  };
+
+  const clientPostCodeInputProps = {
+    label: "Post Code",
+    value: data.clientAddress.postCode,
+    onChange: (e: ChangeEvent<HTMLInputElement>) =>
+      setData((prev) => ({
+        ...prev,
+        clientAddress: {
+          ...prev.clientAddress,
+          postCode: e.target.value,
+        },
+      })),
+
+    name: "clientPostCode",
+  };
+
+  const clientCountryInputProps = {
+    label: "Country",
+    value: data.clientAddress.country,
+    onChange: (e: ChangeEvent<HTMLInputElement>) =>
+      setData((prev) => ({
+        ...prev,
+        clientAddress: {
+          ...prev.clientAddress,
+          country: e.target.value,
+        },
+      })),
+  };
+  /* end of bill to props */
+
+  const datePickerProps = {
+    label: "Invoice Date",
+    value: data.paymentDue,
+    setInvoiceDate: () => {},
+    disabled: editing,
+  };
+
+  const paymentTermsProps = {
+    label: "Payment Terms",
+    options: [
+      { label: "Net 1 Day", value: 1 },
+      { label: "Net 7 Days", value: 7 },
+      { label: "Net 14 Days", value: 14 },
+      { label: "Net 30 Days", value: 30 },
+    ],
+    name: "terms",
+    value: data.paymentTerms,
+    onChange: handlePaymentTermsChange,
+  };
+
+  const projectDescriptionInputProps = {
+    label: "Project Description",
+    value: data.description,
+    onChange: (e: ChangeEvent<HTMLInputElement>) => {
+      setData((prev) => ({
+        ...prev,
+        description: e.target.value,
+      }));
+    },
+  };
   return (
     <>
-      <div
-        className={[styles.root, dark ? styles.darkRoot : ""].join(" ")}
-        style={{ transform: show ? "translateX(0%)" : `translateX(-100%)` }}
-      >
+      <div {...rootDivProps}>
         {screenType === "phone" && <BackButton onClick={cancel} />}
-        <form
-          className={[styles.content, dark ? styles.darkContent : ""].join(" ")}
-        >
+        <form {...formProps}>
           <div className={styles.padding}>
-            <Heading variant="h1">{headingText}</Heading>
+            <Heading variant="h1">
+              {editing && invoice ? (
+                <>
+                  Edit <span>#</span>
+                  {invoice.id}
+                </>
+              ) : (
+                "New Invoice"
+              )}
+            </Heading>
             <p className={styles.colorLabel}>Bill From</p>
-            <Input
-              label="Street Address"
-              value={fromAddress.street}
-              onChange={(e) =>
-                setFromAddress((prev) => ({ ...prev, street: e.target.value }))
-              }
-              name="address"
-            />
+            <Input {...fromStreetInputProps} />
             <div className={styles.inputGrid}>
-              <Input
-                label="City"
-                value={fromAddress.city}
-                onChange={(e) =>
-                  setFromAddress((prev) => ({ ...prev, city: e.target.value }))
-                }
-                name="fromCity"
-              />
-              <Input
-                label="Post Code"
-                value={fromAddress.postCode}
-                onChange={(e) =>
-                  setFromAddress((prev) => ({
-                    ...prev,
-                    postCode: e.target.value,
-                  }))
-                }
-                name="fromPostCode"
-              />
-              <Input
-                label="Country"
-                value={fromAddress.country}
-                onChange={(e) =>
-                  setFromAddress((prev) => ({
-                    ...prev,
-                    country: e.target.value,
-                  }))
-                }
-              />
+              <Input {...fromCityInputProps} />
+              <Input {...fromPostCodeInputProps} />
+              <Input {...fromCountryInputProps} />
             </div>
             <p className={styles.colorLabel}>Bill To</p>
-
-            <Input
-              label="Client's Name"
-              value={clientName}
-              onChange={clientNameHandlers.set}
-            />
-            <Input
-              label="Client's Email"
-              value={clientEmail}
-              onChange={clientEmailHandlers.set}
-            />
-
-            <Input
-              label="Street Address"
-              value={clientAddress.street}
-              onChange={(e) =>
-                setClientAddress((prev) => ({
-                  ...prev,
-                  street: e.target.value,
-                }))
-              }
-            />
+            <Input {...clientNameInputProps} />
+            <Input {...clientEmailInputProps} />
+            <Input {...clientAddressInputProps} />
             <div className={styles.inputGrid}>
-              <Input
-                label="City"
-                value={clientAddress.city}
-                onChange={(e) =>
-                  setClientAddress((prev) => ({
-                    ...prev,
-                    city: e.target.value,
-                  }))
-                }
-                name="clientCity"
-              />
-              <Input
-                label="Post Code"
-                value={clientAddress.postCode}
-                onChange={(e) =>
-                  setClientAddress((prev) => ({
-                    ...prev,
-                    postCode: e.target.value,
-                  }))
-                }
-                name="clientPostCode"
-              />
-              <Input
-                label="Country"
-                value={clientAddress.country}
-                onChange={(e) =>
-                  setClientAddress((prev) => ({
-                    ...prev,
-                    country: e.target.value,
-                  }))
-                }
-              />
+              <Input {...clientCityInputProps} />
+              <Input {...clientPostCodeInputProps} />
+              <Input {...clientCountryInputProps} />
             </div>
 
             <div className={styles.dateAndTerms}>
-              <DatePicker
-                label="Invoice Date"
-                value={invoiceDate}
-                setInvoiceDate={setInvoiceDate}
-                disabled={editing}
-              />
-              <SelectDropdown
-                label="Payment Terms"
-                options={[
-                  { label: "Net 1 Day", value: 1 },
-                  { label: "Net 7 Days", value: 7 },
-                  { label: "Net 14 Days", value: 14 },
-                  { label: "Net 30 Days", value: 30 },
-                ]}
-                name="terms"
-                value={paymentTerms}
-                onChange={handlePaymentTermsChange}
-              />
+              <DatePicker {...datePickerProps} />
+              <SelectDropdown {...paymentTermsProps} />
             </div>
-            <Input
-              label="Project Description"
-              value={description}
-              onChange={descriptionHandlers.set}
-            />
-
+            <Input {...projectDescriptionInputProps} />
             <FormItemList items={items} setItems={setItems} />
           </div>
 
           <div className={bottomClass}>
             {editing && (
               <>
+                {/* empty div for flexbox  */}
                 <div></div>
                 <div>
-                  <Button variant={2} type="button">
+                  <Button variant={2} type="button" onClick={handleCancel}>
                     Cancel
                   </Button>
                   <Button variant={1} type="submit">
@@ -234,12 +360,12 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({
             {!editing && (
               <>
                 <div>
-                  <Button variant={2} type="button">
+                  <Button variant={2} type="button" onClick={handleCancel}>
                     Discard
                   </Button>
                 </div>
                 <div>
-                  <Button variant={3} type="button">
+                  <Button variant={3} type="button" onClick={handleSaveAsDraft}>
                     Save as Draft
                   </Button>
                   <Button variant={1} type="submit">

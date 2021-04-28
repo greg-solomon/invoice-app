@@ -64,12 +64,13 @@ export const SelectDropdown: React.FC<SelectDropdownProps> = (props) => {
         <div
           className={[styles.dropdown, dark ? styles.darkShadow : ""].join(" ")}
         >
-          {props.options.map((option) => (
+          {props.options.map((option, i) => (
             <div
               className={[styles.option, dark ? styles.darkOption : ""].join(
                 " "
               )}
               onClick={() => handleChange(option.value)}
+              key={i}
             >
               {option.label}
             </div>

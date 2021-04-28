@@ -14,15 +14,12 @@ import styles from "../../styles/InvoicePage.module.scss";
 import { BackButton } from "../../components/shared/BackButton";
 import { DeleteModal } from "../../components/invoice/DeleteModal";
 
-interface InvoicePageProps {}
-
-const InvoicePage: React.FC<InvoicePageProps> = (props) => {
-  const { deleteInvoice } = useInvoices();
+const InvoicePage: React.FC = () => {
+  const { deleteInvoice, invoices, editInvoice } = useInvoices();
   const router = useRouter();
   const [invoice, setInvoice] = React.useState<Invoice | null>(null);
   const [isEditing, setEditing] = useToggle(false);
   const [deleting, deletingHandlers] = useToggle(false);
-  const { invoices } = useInvoices();
   const { screenType } = useScreenContext();
   const { dark } = useThemeContext();
   const { id } = router.query;
@@ -35,16 +32,24 @@ const InvoicePage: React.FC<InvoicePageProps> = (props) => {
     }
   };
 
-  React.useEffect(setInvoiceEffect, [id]);
+  React.useEffect(setInvoiceEffect, [id, invoices]);
 
   const handleDeletion = (id: string) => {
     deleteInvoice(id);
     router.replace("/");
   };
+
+  const handleMarkAsPaid = () => {
+    console.log(`Marking as paid...`);
+    if (invoice) {
+      editInvoice(invoice.id, { ...invoice, status: "paid" });
+      setInvoice({ ...invoice, status: "paid" });
+    }
+  };
+
   return (
     <main
       role="main"
-      style={{ overflow: isEditing ? "hidden" : "auto" }}
       className={[styles.main, dark ? styles.darkMain : ""].join(" ")}
     >
       <Head>
@@ -65,13 +70,16 @@ const InvoicePage: React.FC<InvoicePageProps> = (props) => {
           screenType={screenType}
           onClickEditing={setEditing.toggle}
           onClickDelete={deletingHandlers.on}
+          onClickPaid={handleMarkAsPaid}
         />
       )}
       {invoice && <Summary invoice={invoice} />}
-      {screenType === "phone" && (
+      {invoice && screenType === "phone" && (
         <BottomControls
           onClickEditing={setEditing.toggle}
           onClickDelete={deletingHandlers.on}
+          onClickPaid={handleMarkAsPaid}
+          status={invoice.status}
         />
       )}
       {deleting && invoice && (

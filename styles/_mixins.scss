@@ -14,3 +14,14 @@
   width: clamp(20rem, 87.5%, 730px);
   margin: 0 auto;
 }
+
+@mixin button {
+  height: 3rem;
+  padding: 0 1.5rem;
+  border-radius: 1.5rem;
+  border: none;
+  transition: 0.2s all ease;
+  white-space: nowrap;
+  @include normalText;
+  font-weight: bold;
+}
