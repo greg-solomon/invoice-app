@@ -1,14 +1,13 @@
-import React, { SetStateAction } from "react";
+import React, { SetStateAction, useEffect } from "react";
 import { useToggle } from "../../lib/hooks/useToggle";
 import { getDaysInMonth, format, getYear } from "date-fns";
-
-import styles from "./styles/DatePicker.module.scss";
 import { useThemeContext } from "../../lib/context/ThemeContext";
+import styles from "./styles/DatePicker.module.scss";
 
 interface DatePickerProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label: string;
   value: string | number;
-  setInvoiceDate: React.Dispatch<SetStateAction<string>>;
+  setInvoiceDate: (date: string) => void;
 }
 
 export const DatePicker: React.FC<DatePickerProps> = ({
@@ -32,6 +31,10 @@ export const DatePicker: React.FC<DatePickerProps> = ({
   const [currentMonth, setCurrentMonth] = React.useState(initialCurrentMonth);
   const [currentYear, setCurrentYear] = React.useState(initialCurrentYear);
   const [daysInMonth, setDaysInMonth] = React.useState(initialDaysInMonth);
+
+  useEffect(() => {
+    setSelectedDate(new Date(value));
+  }, [value]);
 
   const resetDaysInMonthEffect = () => {
     setDaysInMonth(getDaysInMonth(new Date(currentYear, currentMonth)));
@@ -91,7 +94,9 @@ export const DatePicker: React.FC<DatePickerProps> = ({
   };
 
   const handleDateSelect = (selectedDay: number) => {
-    setSelectedDate(new Date(currentYear, currentMonth, selectedDay));
+    const newDate = new Date(currentYear, currentMonth, selectedDay);
+    setSelectedDate(newDate);
+    setInvoiceDate(format(newDate, "yyyy-MM-dd"));
     openHandlers.off();
   };
 
@@ -100,7 +105,9 @@ export const DatePicker: React.FC<DatePickerProps> = ({
     className: [styles.root, dark ? styles.darkRoot : ""].join(" "),
     ref: ref,
   };
+
   const pickerClass = [styles.picker, dark ? styles.darkPicker : ""].join(" ");
+
   const inputProps = {
     type: "text",
     ...props,

@@ -1,12 +1,11 @@
-import React, { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import React, { ChangeEvent, FC, useEffect, useState } from "react";
 import { useScreenContext } from "../../lib/context/ScreenContext";
-import { Invoice, Item } from "../../types";
+import { Invoice } from "../../types";
 import { DatePicker } from "../ui/DatePicker";
 import { Heading } from "../ui/Heading";
 import { Input } from "../ui/Input";
 import { SelectDropdown } from "../ui/SelectDropdown";
 import { FormItemList } from "./FormItemList";
-import styles from "./styles/InvoiceForm.module.scss";
 import { Button } from "../ui/Button";
 import { useThemeContext } from "../../lib/context/ThemeContext";
 import { BackButton } from "./BackButton";
@@ -14,6 +13,8 @@ import { emptyInvoice } from "../../lib/utils/emptyInvoice";
 import { useInvoices } from "../../lib/context/InvoiceContext";
 import { createID } from "../../lib/utils/createID";
 import { IDIsUnique } from "../../lib/utils/IDisUnique";
+import { addDays, format } from "date-fns";
+import styles from "./styles/InvoiceForm.module.scss";
 
 interface InvoiceFormProps {
   editing?: boolean;
@@ -22,7 +23,7 @@ interface InvoiceFormProps {
   cancel: () => void;
 }
 
-export const InvoiceForm: React.FC<InvoiceFormProps> = ({
+export const InvoiceForm: FC<InvoiceFormProps> = ({
   editing = false,
   invoice,
   cancel,
@@ -31,7 +32,6 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({
   const { addInvoice, invoices, editInvoice } = useInvoices();
   const { screenType } = useScreenContext();
   const { dark } = useThemeContext();
-
   const [data, setData] = useState(invoice || emptyInvoice());
   const [items, setItems] = useState(
     invoice?.items || [{ name: "New Item", quantity: 1, total: 0, price: 0 }]
@@ -47,6 +47,16 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({
         .reduce((acc, val) => (acc += val)),
     }));
   }, [items]);
+
+  useEffect(() => {
+    setData((prev) => ({
+      ...prev,
+      paymentDue: format(
+        addDays(new Date(Date.now()), data.paymentTerms),
+        "yyyy-MM-dd"
+      ),
+    }));
+  }, [data.paymentTerms]);
 
   /* HANDLERS */
   const handlePaymentTermsChange = (newTerms: number) => {
@@ -274,7 +284,12 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({
   const datePickerProps = {
     label: "Invoice Date",
     value: data.paymentDue,
-    setInvoiceDate: () => {},
+    setInvoiceDate: (date: string) => {
+      setData((prev) => ({
+        ...prev,
+        paymentDue: date,
+      }));
+    },
     disabled: editing,
   };
 

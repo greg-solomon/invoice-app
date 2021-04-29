@@ -1,11 +1,37 @@
+import { signOut, useSession } from "next-auth/client";
 import { useRouter } from "next/router";
-import React from "react";
+import React, { useEffect, useRef } from "react";
+import { useInvoices } from "../../lib/context/InvoiceContext";
 import { useThemeContext } from "../../lib/context/ThemeContext";
+import { useToggle } from "../../lib/hooks/useToggle";
 import styles from "./styles/Header.module.scss";
 interface HeaderProps {}
 
 export const Header: React.FC<HeaderProps> = ({}) => {
   const { dark, toggleTheme } = useThemeContext();
+  const { isDemo, demoHandler } = useInvoices();
+  const [session] = useSession();
+  const router = useRouter();
+  const [menuOpen, menuHandler] = useToggle(false);
+  const popupClass = [styles.popup, dark ? styles.popupDark : ""].join(" ");
+  const menuRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const handleClickOff = (e: MouseEvent) => {
+      if (!menuRef.current?.contains(e.target as Node)) {
+        menuHandler.off();
+      }
+    };
+
+    if (menuOpen) {
+      window.addEventListener("click", handleClickOff);
+    } else {
+      window.removeEventListener("click", handleClickOff);
+    }
+
+    return () => {
+      window.removeEventListener("click", handleClickOff);
+    };
+  }, [menuOpen]);
   return (
     <header className={styles.headerRoot}>
       <HeaderLogo />
@@ -31,9 +57,32 @@ export const Header: React.FC<HeaderProps> = ({}) => {
             )}
           </button>
         </div>
-        <div className={styles.avatarWrapper}>
-          <img src="/assets/image-avatar.jpg" alt="Avatar" />
-        </div>
+        {router.pathname !== "/login" && (
+          <>
+            <div className={styles.avatarWrapper} onClick={menuHandler.toggle}>
+              <img
+                src={
+                  session?.user?.image
+                    ? session.user.image
+                    : "assets/image-avatar.jpg"
+                }
+                alt="Avatar"
+              />
+              {menuOpen && (
+                <div className={popupClass} ref={menuRef}>
+                  <ul>
+                    {!isDemo && session && (
+                      <li onClick={() => signOut()}>Sign Out</li>
+                    )}
+                    {isDemo && (
+                      <li onClick={() => demoHandler.off()}>Exit Demo</li>
+                    )}
+                  </ul>
+                </div>
+              )}
+            </div>
+          </>
+        )}
       </div>
     </header>
   );

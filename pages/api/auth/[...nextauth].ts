@@ -9,4 +9,11 @@ export default NextAuth({
     }),
   ],
   database: process.env.MONGO_URL,
+  callbacks: {
+    redirect: async (url, baseUrl) => {
+      return url.startsWith(baseUrl)
+        ? Promise.resolve(url)
+        : Promise.resolve(baseUrl);
+    },
+  },
 });

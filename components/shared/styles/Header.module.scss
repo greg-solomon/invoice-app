@@ -1,9 +1,9 @@
 @import "../../../styles/variables";
+@import "../../../styles/mixins";
 
 // <header> element
 .headerRoot {
   background-color: $ebony;
-  overflow: hidden;
   height: 4.5rem;
   width: 100%;
   display: flex;
@@ -109,9 +109,9 @@
   min-width: 5rem;
   display: flex;
   align-items: center;
+  position: relative;
   justify-content: center;
   height: 100%;
-
   @media (min-width: $tablet) {
     width: 6rem;
   }
@@ -122,8 +122,47 @@
   }
 }
 
+.avatarWrapper {
+  cursor: pointer;
+
+  &:hover {
+    img {
+      border: 3px solid $purple;
+    }
+  }
+}
+
 .avatarWrapper img {
   width: 2rem;
   height: 2rem;
   border-radius: 50%;
+}
+
+.popup {
+  min-width: 180px;
+  position: absolute;
+  background-color: white;
+  top: 0%;
+  left: 105%;
+  z-index: 40;
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  text-align: center;
+  ul {
+    list-style: none;
+
+    li:hover {
+      color: $purple;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+  }
+  color: $vulcan;
+  @include normalText;
+  font-weight: bold;
+}
+
+.popupDark {
+  background-color: $mirage;
+  color: white;
 }
