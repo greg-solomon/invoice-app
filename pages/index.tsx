@@ -78,6 +78,9 @@ export default function Home() {
         role="main"
         className={[styles.main, dark ? styles.darkMain : ""].join(" ")}
       >
+        <Head>
+          <title>Home | Invoice App</title>
+        </Head>
         <ActionBar
           screenType={screenType}
           filterHandlers={filterHandlers}
