@@ -6,7 +6,7 @@ import styles from "./styles/BottomControls.module.scss";
 interface BottomControlsProps {
   onClickEditing: () => void;
   onClickDelete: () => void;
-  onClickPaid?: () => void;
+  onClickPaid: () => void;
   status: ItemStatus;
 }
 
