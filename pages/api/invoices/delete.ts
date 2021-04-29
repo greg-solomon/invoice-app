@@ -22,8 +22,10 @@ const deleteHandler: NextApiHandler = async (req, res) => {
       case "POST":
         await Invoice.findOneAndDelete({ invoiceId: id });
         res.status(200).json({ message: "Deleted Successfully" });
+        break;
       default:
         res.status(400).json({ message: "Invalid request" });
+        break;
     }
   } catch (err) {
     res.status(403).json({ message: err.message });

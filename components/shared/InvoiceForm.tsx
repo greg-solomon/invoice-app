@@ -82,10 +82,7 @@ export const InvoiceForm: FC<InvoiceFormProps> = ({
     } else {
       addInvoice(data);
     }
-
-    setData(emptyInvoice());
-    setItems([{ name: "New Item", quantity: 1, total: 0, price: 0 }]);
-    cancel();
+    return quitAndReset();
   };
 
   const handleSaveInvoice: React.FormEventHandler<HTMLFormElement> = (e) => {
@@ -100,21 +97,19 @@ export const InvoiceForm: FC<InvoiceFormProps> = ({
       setData((prev) => ({ ...prev, id, status: "pending" }));
       addInvoice({ ...data, status: "pending", id });
       e.preventDefault();
-      cancel();
-      return;
+
+      return quitAndReset();
     }
     if (editing) {
       editInvoice(data.id, { ...data, status: "pending" });
       setData({ ...data, status: "pending" });
       e.preventDefault();
-      cancel();
-      return;
+      return quitAndReset();
     } else {
       addInvoice({ ...data, status: "pending" });
       setData({ ...data, status: "pending" });
       e.preventDefault();
-      cancel();
-      return;
+      return quitAndReset();
     }
   };
 
@@ -126,6 +121,11 @@ export const InvoiceForm: FC<InvoiceFormProps> = ({
     cancel();
   };
 
+  const quitAndReset = () => {
+    setData(emptyInvoice());
+    setItems([{ name: "New Item", quantity: 1, total: 0, price: 0 }]);
+    cancel();
+  };
   /* END OF HANDLERS */
 
   const bottomClass = [

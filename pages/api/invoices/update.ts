@@ -15,9 +15,8 @@ const updateHandler: NextApiHandler = async (req, res) => {
       delete invoice.id;
       const mapped = { ...invoice, invoiceId, email: session.user.email };
       await Invoice.findOneAndUpdate({ invoiceId }, { ...mapped });
-
       res.status(200).json({});
-
+      break;
     default:
       res.status(400).json({ message: "Invalid body" });
       break;

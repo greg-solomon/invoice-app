@@ -29,6 +29,7 @@ const fetchInvoiceHandler: NextApiHandler = async (req, res) => {
         break;
       default:
         res.status(400).json({ message: "Error" });
+        break;
     }
   } catch (error) {
     res.status(403).json({
