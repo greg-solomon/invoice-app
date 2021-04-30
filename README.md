@@ -28,23 +28,19 @@ Users should be able to:
 
 ### Links
 
-- Solution URL: [Add solution URL here](https://your-solution-url.com)
-- Live Site URL: [Add live site URL here](https://your-live-site-url.com)
-
-## My process
+- Solution URL: [Github](https://github.com/greg-solomon/invoice-app)
+- Live Site URL: [Live](https://invoice-app-flame.vercel.app/)
 
 ### Built with
 
-- Semantic HTML5 markup
-- CSS custom properties
-- Flexbox
-- CSS Grid
-- Mobile-first workflow
 - [React](https://reactjs.org/) - JS library
 - [Next.js](https://nextjs.org/) - React framework
-- [Styled Components](https://styled-components.com/) - For styles
+- [Sass Modules](https://sass-lang.com/) - For styles
+- [Next-Auth](https://next-auth.js.org/) - Next Auth
+- [MongoDB](https://www.mongodb.com/) - MongoDB
+- [TypeScript](https://www.typescriptlang.org/) - TypeScript
 
 ## Author
 
 - Website - [Greg Solomon](https://www.gregsolomon.dev)
-- Frontend Mentor - [@greg-solomon](https://www.frontendmentor.io/profile/yourusername)
+- Frontend Mentor - [@greg-solomon](https://www.frontendmentor.io/profile/greg-solomon)
